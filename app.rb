@@ -33,7 +33,8 @@ class Bot < Sinatra::Base
           response =
             case text
             when %r`^ping$` then 'pong'
-            when %r`(http://gyazo\.com/\w+)` then gyazo_raw_url($1)
+            when %r`http://d\.pr/i/(\w+)$` then droplr_raw_url($1)
+            when %r`(http://gyazo\.com/\w+)$` then gyazo_raw_url($1)
             else nil
             end
           if response
@@ -58,11 +59,13 @@ class Bot < Sinatra::Base
   private
   def gyazo_raw_url(url)
     res = @agent.get url
-    if res.code == '200'
-      if meta = res.at('meta[name="twitter:image"]')
-        meta.attr 'content'
-      end
-    end
+    res.at('meta[name="twitter:image"]').attr 'content' if res.code == '200'
+  end
+
+  def droplr_raw_url(id)
+    # Official raw url format is `http://d.pr/i/#{id}+`
+    # but use another way for client compatibility.
+    "http://d.pr/i/#{id}.png"
   end
 
 end
