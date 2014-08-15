@@ -1,0 +1,19 @@
+
+## Thumbnail bot for lingr
+
+This bot posts the image url related with user's post.
+
+
+### Supported services
+
+- Twitter (inline photo)
+- Gyazo
+- Droplr
+
+### Work in Progress
+
+- Pixiv
+- NicoNico Seiga
+- Blog services which refuse the access with no referrer
+  - FC2 blog
+  - Livedoor blog
