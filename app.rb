@@ -32,7 +32,7 @@ class Bot < Sinatra::Base
           room_id = m['room']
           response =
             case text
-            when %r`^ping$` then 'pong'
+            when /^ping$/ then 'pong'
             when %r`http://d\.pr/i/(\w+)$` then droplr_raw_url($1)
             when %r`(http://gyazo\.com/\w+)$` then gyazo_raw_url($1)
             else nil
