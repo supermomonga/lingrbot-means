@@ -10,29 +10,59 @@ LingrBot.configure do |config|
   config.secret = ENV['BOT_SECRET']
 end
 
-post '/' do
-  Thread.new do
-    begin
-      JSON.parse(request.body.read)['events'].map{ |e|
-        e['message']
-      }.each do |m|
-        text = m['text']
-        room_id = m['room']
-        response =
-          case text
-          when /ping/ then 'pong'
-          else nil
+class Bot < Sinatra::Base
+
+  configure :development do
+    register Sinatra::Reloader
+  end
+
+  def initialize *args
+    @agent = Mechanize.new
+    @agent.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    super
+  end
+
+  post '/' do
+    Thread.new do
+      begin
+        JSON.parse(request.body.read)['events'].map{ |e|
+          e['message']
+        }.each do |m|
+          text = m['text']
+          room_id = m['room']
+          response =
+            case text
+            when %r`^ping$` then 'pong'
+            when %r`(http://gyazo\.com/\w+)` then gyazo_raw_url($1)
+            else nil
+            end
+          if response
+            puts "say to `#{room_id}`:"
+            puts response
+            LingrBot.say(room_id, response)
           end
-        LingrBot.say(room_id, response) if response
+        end
+      rescue => e
+        puts e
       end
-    rescue e
+    end
+    content_type :text
+    ''
+  end
+
+  get '/' do
+    content_type :text
+    'Still Alive'
+  end
+
+  private
+  def gyazo_raw_url(url)
+    res = @agent.get url
+    if res.code == '200'
+      if meta = res.at('meta[name="twitter:image"]')
+        meta.attr 'content'
+      end
     end
   end
-  content_type :text
-  ''
-end
 
-get '/' do
-  content_type :text
-  'Still Alive'
 end
