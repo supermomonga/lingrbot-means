@@ -19,6 +19,12 @@ class Bot < Sinatra::Base
   def initialize *args
     @agent = Mechanize.new
     @agent.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    @twitter = Twitter::REST::Client.new do |config|
+      config.consumer_key        = ENV['TWITTER_CONSUMER_KEY']
+      config.consumer_secret     = ENV['TWITTER_CONSUMER_SECRET']
+      config.access_token        = ENV['TWITTER_ACCESS_TOKEN']
+      config.access_token_secret = ENV['TWITTER_ACCESS_SECRET']
+    end
     super
   end
 
@@ -33,6 +39,7 @@ class Bot < Sinatra::Base
           response =
             case text
             when /^ping$/ then 'pong'
+            when %r`https://twitter\.com/[^\/]+/status/(\d+)$` then twitter_media_url($1.to_i)
             when %r`http://d\.pr/i/(\w+)$` then droplr_raw_url($1)
             when %r`(http://gyazo\.com/\w+)$` then gyazo_raw_url($1)
             else nil
@@ -66,6 +73,11 @@ class Bot < Sinatra::Base
     # Official raw url format is `http://d.pr/i/#{id}+`
     # but use another way for client compatibility.
     "http://d.pr/i/#{id}.png"
+  end
+
+  def twitter_media_url(status_id)
+    s = @twitter.status status_id
+    s.media.map(&:media_url_https).join("\n") if s.media?
   end
 
 end
