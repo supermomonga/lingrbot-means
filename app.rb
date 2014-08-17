@@ -39,7 +39,7 @@ class Bot < Sinatra::Base
           response =
             case text
             when /^ping$/ then 'pong'
-            when %r`https://twitter\.com/[^\/]+/status(?:es)?/(\d+)$` then twitter_media_url($1.to_i)
+            when %r`https://twitter\.com/[^\/]+/status(?:es)?/(\d+)$(?:\/photo\/\d+)` then twitter_media_url($1.to_i)
             when %r`http://d\.pr/i/(\w+)$` then droplr_raw_url($1)
             when %r`(http://gyazo\.com/\w+)$` then gyazo_raw_url($1)
             else nil
