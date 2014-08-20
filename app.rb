@@ -89,9 +89,9 @@ class Bot < Sinatra::Base
   def pixiv_member(id)
     member = @pixiv.member(id)
     <<-EOS
-    #{member.profile_image_url}
-    #{member.name} (#{member.pixiv_id})
-    http://www.pixiv.net/member.php?id=#{id}
+#{member.profile_image_url}
+#{member.name} (#{member.pixiv_id})
+http://www.pixiv.net/member.php?id=#{id}
     EOS
   end
 
