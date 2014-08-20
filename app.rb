@@ -50,8 +50,10 @@ class Bot < Sinatra::Base
             end
           if response
             puts "say to `#{room_id}`:"
-            puts response
-            LingrBot.say(room_id, response)
+            response.tap{|r| break [r] unless r.class == Array }.each do |r|
+              puts r
+              LingrBot.say(room_id, r)
+            end
           end
         end
       rescue => e
