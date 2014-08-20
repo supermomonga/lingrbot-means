@@ -5,7 +5,10 @@ gem 'sinatra'
 gem 'unicorn'
 gem 'lingr_bot'
 gem 'mechanize'
+
+
 gem 'twitter'
+gem 'pixiv'
 
 group :development do
   gem 'sinatra-contrib'
