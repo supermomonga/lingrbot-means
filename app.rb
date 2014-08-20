@@ -91,7 +91,6 @@ class Bot < Sinatra::Base
     <<-EOS
 #{member.profile_image_url}
 #{member.name} (#{member.pixiv_id})
-http://www.pixiv.net/member.php?id=#{id}
     EOS
   end
 
