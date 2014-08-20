@@ -25,6 +25,9 @@ class Bot < Sinatra::Base
       config.access_token        = ENV['TWITTER_ACCESS_TOKEN']
       config.access_token_secret = ENV['TWITTER_ACCESS_SECRET']
     end
+    @pixiv = Pixiv.client ENV['PIXIV_ID'], ENV['PIXIV_PASSWORD'] do |config|
+      config.user_agent_alias = 'Mac Safari'
+    end
     super
   end
 
@@ -39,6 +42,7 @@ class Bot < Sinatra::Base
           response =
             case text
             when /^ping$/ then 'pong'
+            when %r`http://(?:www|touch)?\.pixiv\.net/member\.php\?id=(\d+)` then pixiv_member($1)
             when %r`https://twitter\.com/[^\/]+/status(?:es)?/(\d+)(?:\/photo\/\d+)?$` then twitter_media_url($1.to_i)
             when %r`http://d\.pr/i/(\w+)$` then droplr_raw_url($1)
             when %r`(http://gyazo\.com/\w+)$` then gyazo_raw_url($1)
@@ -78,6 +82,15 @@ class Bot < Sinatra::Base
   def twitter_media_url(status_id)
     s = @twitter.status status_id
     s.media.map(&:media_url_https).join("\n") if s.media?
+  end
+
+  def pixiv_member(id)
+    member = @pixiv.member(id)
+    <<-EOS
+    #{member.profile_image_url}
+    #{member.name} (#{member.pixiv_id})
+    http://www.pixiv.net/member.php?id=#{id}
+    EOS
   end
 
 end
