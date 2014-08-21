@@ -19,6 +19,11 @@ class Bot < Sinatra::Base
   def initialize *args
     @agent = Mechanize.new
     @agent.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    @agent.user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.0 Safari/537.36'
+    @agent.request_headers = {
+      'Accept-Encoding' => 'gzip,deflate,sdch',
+      'Accept-Language' => 'ja,en-US;q=0.8,en;q=0.6'
+    }
     @twitter = Twitter::REST::Client.new do |config|
       config.consumer_key        = ENV['TWITTER_CONSUMER_KEY']
       config.consumer_secret     = ENV['TWITTER_CONSUMER_SECRET']
@@ -42,6 +47,7 @@ class Bot < Sinatra::Base
           response =
             case text
             when /^ping$/ then 'pong'
+            when %r`http://live\.nicovideo\.jp/gate/(lv\d+)` then nicolive_gate($1)
             when %r`http://(?:www|touch)?\.pixiv\.net/member\.php\?id=(\d+)` then pixiv_member($1)
             when %r`https://twitter\.com/[^\/]+/status(?:es)?/(\d+)(?:\/photo\/\d+)?$` then twitter_media_url($1.to_i)
             when %r`http://d\.pr/i/(\w+)$` then droplr_raw_url($1)
@@ -92,6 +98,15 @@ class Bot < Sinatra::Base
 #{member.profile_image_url}
 #{member.name} (#{member.pixiv_id})
     EOS
+  end
+
+  def nicolive_gate(id)
+    res = @agent.get "http://live.nicovideo.jp/gate/#{id}"
+    [
+      res.at('meta[property="og:image"]').attr('content'),
+      res.at('meta[property="og:title"]').attr('content'),
+      res.at('.kaijo').inner_text.strip
+    ].join "\n" if res.code == '200'
   end
 
 end
