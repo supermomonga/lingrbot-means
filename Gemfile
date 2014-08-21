@@ -9,6 +9,7 @@ gem 'mechanize'
 
 gem 'twitter'
 gem 'pixiv'
+gem 'niconico'
 
 group :development do
   gem 'sinatra-contrib'
