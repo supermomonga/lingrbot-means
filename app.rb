@@ -94,10 +94,11 @@ class Bot < Sinatra::Base
 
   def pixiv_member(id)
     member = @pixiv.member(id)
-    <<-EOS
-#{member.profile_image_url}
-#{member.name} (#{member.pixiv_id})
-    EOS
+    "%s\n%s (%s)" % [
+      member.profile_image_url,
+      member.name,
+      member.pixiv_id
+    ]
   end
 
   def nicolive_gate(id)
