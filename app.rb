@@ -17,22 +17,9 @@ class Bot < Sinatra::Base
   end
 
   def initialize *args
-    @agent = Mechanize.new
-    @agent.verify_mode = OpenSSL::SSL::VERIFY_NONE
-    @agent.user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.0 Safari/537.36'
-    @agent.request_headers = {
-      'Accept-Encoding' => 'gzip,deflate,sdch',
-      'Accept-Language' => 'ja,en-US;q=0.8,en;q=0.6'
-    }
-    @twitter = Twitter::REST::Client.new do |config|
-      config.consumer_key        = ENV['TWITTER_CONSUMER_KEY']
-      config.consumer_secret     = ENV['TWITTER_CONSUMER_SECRET']
-      config.access_token        = ENV['TWITTER_ACCESS_TOKEN']
-      config.access_token_secret = ENV['TWITTER_ACCESS_SECRET']
-    end
-    @pixiv = Pixiv.client ENV['PIXIV_ID'], ENV['PIXIV_PASSWORD'] do |config|
-      config.user_agent_alias = 'Mac Safari'
-    end
+    init_mechanize
+    init_twitter
+    init_pixiv
     super
   end
 
@@ -77,6 +64,31 @@ class Bot < Sinatra::Base
   end
 
   private
+  def init_mechanize
+    @agent = Mechanize.new
+    @agent.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    @agent.user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.0 Safari/537.36'
+    @agent.request_headers = {
+      'Accept-Encoding' => 'gzip,deflate,sdch',
+      'Accept-Language' => 'ja,en-US;q=0.8,en;q=0.6'
+    }
+  end
+
+  def init_twitter
+    @twitter = Twitter::REST::Client.new do |config|
+      config.consumer_key        = ENV['TWITTER_CONSUMER_KEY']
+      config.consumer_secret     = ENV['TWITTER_CONSUMER_SECRET']
+      config.access_token        = ENV['TWITTER_ACCESS_TOKEN']
+      config.access_token_secret = ENV['TWITTER_ACCESS_SECRET']
+    end
+  end
+
+  def init_pixiv
+    @pixiv = Pixiv.client ENV['PIXIV_ID'], ENV['PIXIV_PASSWORD'] do |config|
+      config.user_agent_alias = 'Mac Safari'
+    end
+  end
+
   def gyazo_raw_url(url)
     res = @agent.get url
     res.at('meta[name="twitter:image"]').attr 'content' if res.code == '200'
