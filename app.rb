@@ -47,6 +47,7 @@ class Bot < Sinatra::Base
           response =
             case text
             when /^ping$/ then 'pong'
+            when %r`http://www\.nicovideo\.jp/watch/(sm\d+)` then nicovideo($1)
             when %r`http://live\.nicovideo\.jp/gate/(lv\d+)` then nicolive_gate($1)
             when %r`http://(?:www|touch)?\.pixiv\.net/member\.php\?id=(\d+)` then pixiv_member($1)
             when %r`https://twitter\.com/[^\/]+/status(?:es)?/(\d+)(?:\/photo\/\d+)?$` then twitter_media_url($1.to_i)
@@ -108,6 +109,11 @@ class Bot < Sinatra::Base
       res.at('meta[property="og:title"]').attr('content'),
       res.at('.kaijo').inner_text.strip
     ].join "\n" if res.code == '200'
+  end
+
+  def nicovideo(id)
+    res = @agent.get "http://ext.nicovideo.jp/api/getthumbinfo/#{id}"
+    "%s.L#.jpg" % res.at('thumbnail_url').inner_text if res.code == '200'
   end
 
 end
