@@ -9,6 +9,8 @@ This bot posts the image url related with user's post.
 - Twitter (inline photo)
 - Gyazo
 - Droplr
+- NicoVideo
+- NicoLive Gate page
 
 ### Work in Progress
 
