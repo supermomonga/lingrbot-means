@@ -25,7 +25,6 @@ class Bot < Sinatra::Base
 
   post '/' do
     Thread.new do
-      sleep 2
       begin
         JSON.parse(request.body.read)['events'].map{ |e|
           e['message']
