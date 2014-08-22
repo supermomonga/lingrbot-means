@@ -70,7 +70,7 @@ class Bot < Sinatra::Base
         sleep 0.5
         next if @@queues.empty?
         begin
-          message = @@queues.pop
+          message = @@queues.shift
           text = message['text']
           room_id = message['room']
           response =
