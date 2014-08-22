@@ -24,8 +24,8 @@ class Bot < Sinatra::Base
   end
 
   post '/' do
-    Thread.new do
-      # begin
+    # Thread.new do
+      begin
         JSON.parse(request.body.read)['events'].map{ |e|
           e['message']
         }.each do |m|
