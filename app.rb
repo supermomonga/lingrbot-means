@@ -24,7 +24,8 @@ class Bot < Sinatra::Base
   end
 
   post '/' do
-    # Thread.new do
+    Thread.new do
+      sleep 2
       begin
         JSON.parse(request.body.read)['events'].map{ |e|
           e['message']
@@ -58,7 +59,7 @@ class Bot < Sinatra::Base
         puts "Got error:"
         puts e
       end
-    # end
+    end
     content_type :text
     ''
   end
