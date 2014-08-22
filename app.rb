@@ -20,13 +20,12 @@ class Bot < Sinatra::Base
     init_mechanize
     init_twitter
     init_pixiv
-    @queues = []
     spawn_worker
     super
   end
 
   post '/' do
-    @queues.push *JSON.parse(request.body.read)['events'].map{ |e|
+    enqueue *JSON.parse(request.body.read)['events'].map{ |e|
       e['message']
     }
     content_type :text
@@ -64,13 +63,29 @@ class Bot < Sinatra::Base
     end
   end
 
+  def init_queues
+    puts "Initialize queues." unless @queues
+    @queues ||= []
+  end
+
+  def enqueue message
+    puts "Enqueued."
+    @queues.push message
+  end
+
+  def dequeue
+    puts "Dequeued."
+    @queues.shift
+  end
+
   def spawn_worker
+    init_queues
     EM:: defer do
       loop do
         sleep 0.5
         next if @queues.empty?
         begin
-          message = @queues.shift
+          message = dequeue
           text = message['text']
           room_id = message['room']
           response =
