@@ -142,6 +142,6 @@ class Bot < Sinatra::Base
 
   def nicoseiga_comic_main_url(url)
     res = @agent.get url
-    "%s#.png" res.at('.main_visual img').attr 'src' if res.code == '200'
+    "%s#.png" % res.at('.main_visual img').attr 'src' if res.code == '200'
   end
 end
