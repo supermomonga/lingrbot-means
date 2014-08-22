@@ -39,6 +39,9 @@ class Bot < Sinatra::Base
             when %r`http://(?:www|touch)?\.pixiv\.net/member\.php\?id=(\d+)` then pixiv_member($1)
             when %r`https://twitter\.com/[^\/]+/status(?:es)?/(\d+)(?:\/photo\/\d+)?$` then twitter_media_url($1.to_i)
             when %r`http://d\.pr/i/(\w+)$` then droplr_raw_url($1)
+            when %r`http://seiga\.nicovideo\.jp/seiga/im(\d+)` then nicoseiga_image_url($1.to_i)
+            when %r`(http://seiga\.nicovideo\.jp/watch/mg\d+)` then nicoseiga_comic_thumb_url($1)
+            when %r`(http://seiga\.nicovideo\.jp/comic/\d+)` then nicoseiga_comic_main_url($1)
             when %r`(http://gyazo\.com/\w+)$` then gyazo_raw_url($1)
             else nil
             end
@@ -128,4 +131,19 @@ class Bot < Sinatra::Base
     "%s.L#.jpg" % res.at('thumbnail_url').inner_text if res.code == '200'
   end
 
+  def nicoseiga_image_url(id)
+    "http://lohas.nicoseiga.jp/thumb/#{id}i#.png"
+  end
+
+  def nicoseiga_comic_thumb_url(url)
+    res = @agent.get url
+    image_url = res.parser.xpath("//img[@class='thumb']").first["src"]
+    "#{image_url}#.png"
+  end
+
+  def nicoseiga_comic_main_url(url)
+    res = @agent.get url
+    image_url = res.parser.xpath("//img[@class='main_visual']").first["src"]
+    "#{image_url}#.png"
+  end
 end
