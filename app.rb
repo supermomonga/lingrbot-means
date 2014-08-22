@@ -43,6 +43,7 @@ class Bot < Sinatra::Base
             when %r`(http://seiga\.nicovideo\.jp/watch/mg\d+)` then nicoseiga_comic_thumb_url($1)
             when %r`(http://seiga\.nicovideo\.jp/comic/\d+)` then nicoseiga_comic_main_url($1)
             when %r`(http://gyazo\.com/\w+)$` then gyazo_raw_url($1)
+            when %r`http://ow\.ly/i/(\w+)` then owly_raw_url($1)
             else nil
             end
           if response
@@ -144,4 +145,10 @@ class Bot < Sinatra::Base
     res = @agent.get url
     "%s#.png" % res.at('.main_visual img').attr('src') if res.code == '200'
   end
+
+  def owly_raw_url(id)
+    # ow.ly will convert all image types to jpg
+    "http://static.ow.ly/photos/normal/#{id}.jpg"
+  end
+
 end
