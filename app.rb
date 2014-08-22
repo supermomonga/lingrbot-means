@@ -20,13 +20,13 @@ class Bot < Sinatra::Base
     init_mechanize
     init_twitter
     init_pixiv
-    @@queues = []
+    @queues = []
     spawn_worker
     super
   end
 
   post '/' do
-    @@queues.push *JSON.parse(request.body.read)['events'].map{ |e|
+    @queues.push *JSON.parse(request.body.read)['events'].map{ |e|
       e['message']
     }
     content_type :text
@@ -68,9 +68,9 @@ class Bot < Sinatra::Base
     EM:: defer do
       loop do
         sleep 0.5
-        next if @@queues.empty?
+        next if @queues.empty?
         begin
-          message = @@queues.shift
+          message = @queues.shift
           text = message['text']
           room_id = message['room']
           response =
