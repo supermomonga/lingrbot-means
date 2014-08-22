@@ -55,6 +55,7 @@ class Bot < Sinatra::Base
           end
         end
       rescue => e
+        puts "Got error:"
         puts e
       end
     end
