@@ -137,13 +137,13 @@ class Bot < Sinatra::Base
 
   def nicoseiga_comic_thumb_url(url)
     res = @agent.get url
-    image_url = res.parser.xpath("//img[@class='thumb']").first["src"]
+    image_url = res.at('img[@class="thumb"]')["src"]
     "#{image_url}#.png"
   end
 
   def nicoseiga_comic_main_url(url)
     res = @agent.get url
-    image_url = res.parser.xpath("//img[@class='main_visual']").first["src"]
+    image_url = res.at('div[class="main_visual"]//img')["src"]
     "#{image_url}#.png"
   end
 end
