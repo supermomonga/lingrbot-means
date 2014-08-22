@@ -86,7 +86,7 @@ class Bot < Sinatra::Base
             when %r`(http://seiga\.nicovideo\.jp/comic/\d+)` then nicoseiga_comic_main_url($1)
             when %r`(http://gyazo\.com/\w+)$` then gyazo_raw_url($1)
             when %r`http://ow\.ly/i/(\w+)` then owly_raw_url($1)
-            else nil
+            else nil.tap{ puts "Didn't match." }
             end
           if response
             puts "say to `#{room_id}`:"
