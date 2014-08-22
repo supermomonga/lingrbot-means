@@ -16,6 +16,7 @@ GEM
       dotenv-deployment (~> 0.0.2)
     dotenv-deployment (0.0.2)
     equalizer (0.0.9)
+    eventmachine (1.0.3)
     faraday (0.9.0)
       multipart-post (>= 1.2, < 3)
     foreman (0.74.0)
@@ -105,6 +106,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  eventmachine
   foreman
   lingr_bot
   mechanize

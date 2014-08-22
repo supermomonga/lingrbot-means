@@ -20,45 +20,15 @@ class Bot < Sinatra::Base
     init_mechanize
     init_twitter
     init_pixiv
+    @@queues = []
+    spawn_worker
     super
   end
 
   post '/' do
-    Thread.new do
-      begin
-        JSON.parse(request.body.read)['events'].map{ |e|
-          e['message']
-        }.each do |m|
-          text = m['text']
-          room_id = m['room']
-          response =
-            case text
-            when /^ping$/ then 'pong'
-            when %r`http://(?:www\.nicovideo\.jp/watch|nico\.ms)/(sm\d+)` then nicovideo($1)
-            when %r`http://live\.nicovideo\.jp/gate/(lv\d+)` then nicolive_gate($1)
-            when %r`http://(?:www|touch)?\.pixiv\.net/member\.php\?id=(\d+)` then pixiv_member($1)
-            when %r`https://twitter\.com/[^\/]+/status(?:es)?/(\d+)(?:\/photo\/\d+)?$` then twitter_media_url($1.to_i)
-            when %r`http://d\.pr/i/(\w+)$` then droplr_raw_url($1)
-            when %r`http://seiga\.nicovideo\.jp/seiga/im(\d+)` then nicoseiga_image_url($1.to_i)
-            when %r`(http://seiga\.nicovideo\.jp/watch/mg\d+)` then nicoseiga_comic_thumb_url($1)
-            when %r`(http://seiga\.nicovideo\.jp/comic/\d+)` then nicoseiga_comic_main_url($1)
-            when %r`(http://gyazo\.com/\w+)$` then gyazo_raw_url($1)
-            when %r`http://ow\.ly/i/(\w+)` then owly_raw_url($1)
-            else nil
-            end
-          if response
-            puts "say to `#{room_id}`:"
-            response.tap{|r| break [r] unless r.class == Array }.each do |r|
-              puts r
-              LingrBot.say(room_id, r)
-            end
-          end
-        end
-      rescue => e
-        puts "Got error:"
-        puts e
-      end
-    end
+    @@queues.push *JSON.parse(request.body.read)['events'].map{ |e|
+      e['message']
+    }
     content_type :text
     ''
   end
@@ -91,6 +61,44 @@ class Bot < Sinatra::Base
   def init_pixiv
     @pixiv = Pixiv.client ENV['PIXIV_ID'], ENV['PIXIV_PASSWORD'] do |config|
       config.user_agent_alias = 'Mac Safari'
+    end
+  end
+
+  def spawn_worker
+    EM:: defer do
+      loop do
+        sleep 0.5
+        next if @@queues.empty?
+        begin
+          message = @@queues.pop
+          text = message['text']
+          room_id = message['room']
+          response =
+            case text
+            when /^ping$/ then 'pong'
+            when %r`http://(?:www\.nicovideo\.jp/watch|nico\.ms)/(sm\d+)` then nicovideo($1)
+            when %r`http://live\.nicovideo\.jp/gate/(lv\d+)` then nicolive_gate($1)
+            when %r`http://(?:www|touch)?\.pixiv\.net/member\.php\?id=(\d+)` then pixiv_member($1)
+            when %r`https://twitter\.com/[^\/]+/status(?:es)?/(\d+)(?:\/photo\/\d+)?$` then twitter_media_url($1.to_i)
+            when %r`http://d\.pr/i/(\w+)$` then droplr_raw_url($1)
+            when %r`http://seiga\.nicovideo\.jp/seiga/im(\d+)` then nicoseiga_image_url($1.to_i)
+            when %r`(http://seiga\.nicovideo\.jp/watch/mg\d+)` then nicoseiga_comic_thumb_url($1)
+            when %r`(http://seiga\.nicovideo\.jp/comic/\d+)` then nicoseiga_comic_main_url($1)
+            when %r`(http://gyazo\.com/\w+)$` then gyazo_raw_url($1)
+            when %r`http://ow\.ly/i/(\w+)` then owly_raw_url($1)
+            else nil
+            end
+          if response
+            puts "say to `#{room_id}`:"
+            response.tap{|r| break [r] unless r.class == Array }.each do |r|
+              puts r
+              LingrBot.say(room_id, r)
+            end
+          end
+        rescue => e
+          puts "Got error: #{e}"
+        end
+      end
     end
   end
 

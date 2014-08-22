@@ -5,6 +5,7 @@ gem 'sinatra'
 gem 'unicorn'
 gem 'lingr_bot'
 gem 'mechanize'
+gem 'eventmachine'
 
 
 gem 'twitter'
