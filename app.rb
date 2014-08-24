@@ -85,36 +85,36 @@ class Bot < Sinatra::Base
         sleep 0.5
         next if @queues.empty?
         begin
-          message = dequeue
-          text = message['text']
-          room_id = message['room']
-          response =
-            case text
-            when /^ping$/ then 'pong'
-            when %r`http://(?:www\.nicovideo\.jp/watch|nico\.ms)/(sm\d+)` then nicovideo($1)
-            when %r`http://live\.nicovideo\.jp/gate/(lv\d+)` then nicolive_gate($1)
-            when %r`http://(?:www|touch)?\.pixiv\.net/member\.php\?id=(\d+)` then pixiv_member($1)
-            when %r`https://twitter\.com/[^\/]+/status(?:es)?/(\d+)(?:\/photo\/\d+)?$` then twitter_media_url($1.to_i)
-            when %r`http://d\.pr/i/(\w+)$` then droplr_raw_url($1)
-            when %r`http://seiga\.nicovideo\.jp/seiga/im(\d+)` then nicoseiga_image_url($1.to_i)
-            when %r`(http://seiga\.nicovideo\.jp/watch/mg\d+)` then nicoseiga_comic_thumb_url($1)
-            when %r`(http://seiga\.nicovideo\.jp/comic/\d+)` then nicoseiga_comic_main_url($1)
-            when %r`(http://gyazo\.com/\w+)$` then gyazo_raw_url($1)
-            when %r`http://ow\.ly/i/(\w+)` then owly_raw_url($1)
-            else nil.tap{ puts "Didn't match." }
-            end
-          if response
-            puts "say to `#{room_id}`:"
-            response.tap{|r| break [r] unless r.class == Array }.each do |r|
-              puts r
-              LingrBot.say(room_id, r)
-            end
-          end
+          handle_message dequeue
         rescue => e
           puts "Got error: #{e}"
         end
       end
     end
+  end
+
+  def handle_message message
+    response =
+      case message['text']
+      when /^ping$/ then 'pong'
+      when %r`http://(?:www\.nicovideo\.jp/watch|nico\.ms)/(sm\d+)` then nicovideo($1)
+      when %r`http://live\.nicovideo\.jp/gate/(lv\d+)` then nicolive_gate($1)
+      when %r`http://(?:www|touch)?\.pixiv\.net/member\.php\?id=(\d+)` then pixiv_member($1)
+      when %r`https://twitter\.com/[^\/]+/status(?:es)?/(\d+)(?:\/photo\/\d+)?$` then twitter_media_url($1.to_i)
+      when %r`http://d\.pr/i/(\w+)$` then droplr_raw_url($1)
+      when %r`http://seiga\.nicovideo\.jp/seiga/im(\d+)` then nicoseiga_image_url($1.to_i)
+      when %r`(http://seiga\.nicovideo\.jp/watch/mg\d+)` then nicoseiga_comic_thumb_url($1)
+      when %r`(http://seiga\.nicovideo\.jp/comic/\d+)` then nicoseiga_comic_main_url($1)
+      when %r`(http://gyazo\.com/\w+)$` then gyazo_raw_url($1)
+      when %r`http://ow\.ly/i/(\w+)` then owly_raw_url($1)
+      else nil.tap{ puts "Didn't match." }
+      end
+    say message['room'], response if response
+  end
+
+  def say room_id, message
+    puts "say to `#{room_id}`:"
+    LingrBot.say(room_id, message)
   end
 
   def gyazo_raw_url(url)
@@ -135,20 +135,12 @@ class Bot < Sinatra::Base
 
   def pixiv_member(id)
     member = @pixiv.member(id)
-    "%s\n%s (%s)" % [
-      member.profile_image_url,
-      member.name,
-      member.pixiv_id
-    ]
+    member.profile_image_url
   end
 
   def nicolive_gate(id)
     res = @agent.get "http://live.nicovideo.jp/gate/#{id}"
-    [
-      res.at('meta[property="og:image"]').attr('content'),
-      res.at('meta[property="og:title"]').attr('content'),
-      res.at('.kaijo').inner_text.strip
-    ].join "\n" if res.code == '200'
+    res.at('meta[property="og:image"]').attr('content') if res.code == '200'
   end
 
   def nicovideo(id)
