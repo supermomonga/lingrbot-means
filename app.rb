@@ -117,8 +117,6 @@ class Bot < Sinatra::Base
         gyazo_raw_url($1)
       when %r`http://ow\.ly/i/(\w+)`
         owly_raw_url($1)
-      else
-        nil
       end
     say message['room'], response if response
     puts "Didn't match." unless response
