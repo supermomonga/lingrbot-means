@@ -97,19 +97,31 @@ class Bot < Sinatra::Base
     response =
       case message['text']
       when /^ping$/ then 'pong'
-      when %r`http://(?:www\.nicovideo\.jp/watch|nico\.ms)/(sm\d+)` then nicovideo($1)
-      when %r`http://live\.nicovideo\.jp/gate/(lv\d+)` then nicolive_gate($1)
-      when %r`http://(?:www|touch)?\.pixiv\.net/member\.php\?id=(\d+)` then pixiv_member($1)
-      when %r`https://twitter\.com/[^\/]+/status(?:es)?/(\d+)(?:\/photo\/\d+)?$` then twitter_media_url($1.to_i)
-      when %r`http://d\.pr/i/(\w+)$` then droplr_raw_url($1)
-      when %r`http://seiga\.nicovideo\.jp/seiga/im(\d+)` then nicoseiga_image_url($1.to_i)
-      when %r`(http://seiga\.nicovideo\.jp/watch/mg\d+)` then nicoseiga_comic_thumb_url($1)
-      when %r`(http://seiga\.nicovideo\.jp/comic/\d+)` then nicoseiga_comic_main_url($1)
-      when %r`(http://gyazo\.com/\w+)$` then gyazo_raw_url($1)
-      when %r`http://ow\.ly/i/(\w+)` then owly_raw_url($1)
-      else nil.tap{ puts "Didn't match." }
+      when %r`http://(?:www\.nicovideo\.jp/watch|nico\.ms)/(sm\d+)`
+        nicovideo($1)
+      when %r`http://live\.nicovideo\.jp/gate/(lv\d+)`
+        nicolive_gate($1)
+      when %r`http://(?:www|touch)?\.pixiv\.net/member\.php\?id=(\d+)`
+        pixiv_member($1)
+      when %r`https://twitter\.com/[^\/]+/status(?:es)?/(\d+)(?:\/photo\/\d+)?$`
+        twitter_media_url($1.to_i)
+      when %r`http://d\.pr/i/(\w+)$`
+        droplr_raw_url($1)
+      when %r`http://seiga\.nicovideo\.jp/seiga/im(\d+)`
+        nicoseiga_image_url($1.to_i)
+      when %r`(http://seiga\.nicovideo\.jp/watch/mg\d+)`
+        nicoseiga_comic_thumb_url($1)
+      when %r`(http://seiga\.nicovideo\.jp/comic/\d+)`
+        nicoseiga_comic_main_url($1)
+      when %r`(http://gyazo\.com/\w+)$`
+        gyazo_raw_url($1)
+      when %r`http://ow\.ly/i/(\w+)`
+        owly_raw_url($1)
+      else
+        nil
       end
     say message['room'], response if response
+    puts "Didn't match." unless response
   end
 
   def say room_id, message
