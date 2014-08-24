@@ -96,7 +96,8 @@ class Bot < Sinatra::Base
   def handle_message message
     response =
       case message['text']
-      when /^ping$/ then 'pong'
+      when /^ping$/
+        'pong'
       when %r`http://(?:www\.nicovideo\.jp/watch|nico\.ms)/(sm\d+)`
         nicovideo($1)
       when %r`http://live\.nicovideo\.jp/gate/(lv\d+)`
