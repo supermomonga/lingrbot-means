@@ -19,6 +19,7 @@ class Bot < Sinatra::Base
   def initialize *args
     init_mechanize
     init_redis
+    init_gyazo
     init_twitter
     init_pixiv
     spawn_worker
@@ -52,6 +53,11 @@ class Bot < Sinatra::Base
   def init_redis
     uri = URI.parse ENV['REDISCLOUD_URL'] || 'redis://localhost:6379'
     @redis = Redis.new host: uri.host, port: uri.port, password: uri.password
+  end
+
+  def init_gyazo
+    @gyazo = Gyazo::Client.new
+    @gyazo.host = ENV['GYAZO_HOST'] || 'http://gyazo.com'
   end
 
   def init_twitter
@@ -132,6 +138,10 @@ class Bot < Sinatra::Base
   def say room_id, message
     puts "say to `#{room_id}`:"
     LingrBot.say(room_id, message)
+  end
+
+  def gyazo_create binary
+
   end
 
   def gyazo_raw_url(url)
