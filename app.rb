@@ -144,52 +144,52 @@ class Bot < Sinatra::Base
 
   end
 
-  def gyazo_raw_url(url)
+  def gyazo_raw_url url
     res = @agent.get url
     res.at('meta[name="twitter:image"]').attr 'content' if res.code == '200'
   end
 
-  def droplr_raw_url(id)
+  def droplr_raw_url id
     # Official raw url format is `http://d.pr/i/#{id}+`
     # but use another way for client compatibility.
     "http://d.pr/i/#{id}.png"
   end
 
-  def twitter_media_url(status_id)
+  def twitter_media_url status_id
     s = @twitter.status status_id
     s.media.map(&:media_url_https).join("\n") if s.media?
   end
 
-  def pixiv_member(id)
-    member = @pixiv.member(id)
+  def pixiv_member id
+    member = @pixiv.member id
     member.profile_image_url
   end
 
-  def nicolive_gate(id)
+  def nicolive_gate id
     res = @agent.get "http://live.nicovideo.jp/gate/#{id}"
     res.at('meta[property="og:image"]').attr('content') if res.code == '200'
   end
 
-  def nicovideo(id)
+  def nicovideo id
     res = @agent.get "http://ext.nicovideo.jp/api/getthumbinfo/#{id}"
     "%s.L#.jpg" % res.at('thumbnail_url').inner_text if res.code == '200'
   end
 
-  def nicoseiga_image_url(id)
+  def nicoseiga_image_url id
     "http://lohas.nicoseiga.jp/thumb/#{id}i#.png"
   end
 
-  def nicoseiga_comic_thumb_url(url)
+  def nicoseiga_comic_thumb_url url
     res = @agent.get url
     "%s#.png" % res.at('meta[property="og:image"]').attr('content') if res.code == '200'
   end
 
-  def nicoseiga_comic_main_url(url)
+  def nicoseiga_comic_main_url url
     res = @agent.get url
     "%s#.png" % res.at('.main_visual img').attr('src') if res.code == '200'
   end
 
-  def owly_raw_url(id)
+  def owly_raw_url id
     # ow.ly will convert all image types to jpg
     "http://static.ow.ly/photos/normal/#{id}.jpg"
   end
