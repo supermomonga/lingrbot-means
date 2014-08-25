@@ -18,6 +18,7 @@ class Bot < Sinatra::Base
 
   def initialize *args
     init_mechanize
+    init_redis
     init_twitter
     init_pixiv
     spawn_worker
@@ -46,6 +47,11 @@ class Bot < Sinatra::Base
       'Accept-Encoding' => 'gzip,deflate,sdch',
       'Accept-Language' => 'ja,en-US;q=0.8,en;q=0.6'
     }
+  end
+
+  def init_redis
+    uri = URI.parse ENV['REDISCLOUD_URL'] || 'redis://localhost:6379'
+    @redis = Redis.new host: uri.host, port: uri.port, password: uri.password
   end
 
   def init_twitter

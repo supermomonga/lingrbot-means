@@ -65,6 +65,7 @@ GEM
     rack-test (0.6.2)
       rack (>= 1.0)
     raindrops (0.13.0)
+    redis (3.1.0)
     simple_oauth (0.2.0)
     sinatra (1.4.5)
       rack (~> 1.4)
@@ -111,6 +112,7 @@ DEPENDENCIES
   lingr_bot
   mechanize
   pixiv
+  redis
   sinatra
   sinatra-contrib
   twitter
