@@ -56,8 +56,8 @@ class Bot < Sinatra::Base
   end
 
   def init_gyazo
-    @gyazo = Gyazo::Client.new
-    @gyazo.host = ENV['GYAZO_HOST'] || 'http://gyazo.com'
+    # @gyazo = Gyazo::Client.new
+    # @gyazo.host = ENV['GYAZO_HOST'] || 'http://gyazo.com'
   end
 
   def init_twitter
