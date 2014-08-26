@@ -130,6 +130,8 @@ class Bot < Sinatra::Base
         gyazo_raw_url($1)
       when %r`http://ow\.ly/i/(\w+)`
         owly_raw_url($1)
+      when %r`(http://\w+\.\w.yimg.jp/.+)`
+        append_extension $1
       end
     say message['room'], response if response
     puts "Didn't match." unless response
@@ -142,6 +144,10 @@ class Bot < Sinatra::Base
 
   def gyazo_create binary
 
+  end
+
+  def append_extension url, extension = :jpg
+    "#{url}#.#{extension}"
   end
 
   def gyazo_raw_url url
