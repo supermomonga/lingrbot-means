@@ -15,4 +15,5 @@ gem 'pixiv'
 group :development do
   gem 'sinatra-contrib'
   gem 'foreman'
+  gem 'rspec'
 end
