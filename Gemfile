@@ -16,4 +16,5 @@ group :development do
   gem 'sinatra-contrib'
   gem 'foreman'
   gem 'rspec'
+  gem 'guard-rspec', require: false
 end
