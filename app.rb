@@ -110,7 +110,7 @@ class Bot < Sinatra::Base
       case message['text']
       when /^ping$/
         'pong'
-      when %r`http://(?:www\.nicovideo\.jp/watch|nico\.ms)/(sm\d+)`
+      when %r`http://(?:www\.nicovideo\.jp/watch|nico\.ms)/((?:sm|nm)?\d+)`
         nicovideo($1)
       when %r`http://live\.nicovideo\.jp/gate/(lv\d+)`
         nicolive_gate($1)
