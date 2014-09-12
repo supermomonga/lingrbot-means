@@ -142,6 +142,21 @@ class Bot < Sinatra::Base
     LingrBot.say(room_id, message)
   end
 
+  def get_headers url
+    headers = {}
+    uri = URI.parse url
+    begin
+      http = Net::HTTP.start uri.host, uri.port
+      request = Net::HTTP::Get.new uri.request_uri
+      http.request request do |response|
+        headers = response.to_hash
+        break
+      end
+    rescue IOError
+    end
+    return headers
+  end
+
   def gyazo_create binary
 
   end
