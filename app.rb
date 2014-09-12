@@ -193,7 +193,17 @@ class Bot < Sinatra::Base
 
   def nicovideo id
     res = @agent.get "http://ext.nicovideo.jp/api/getthumbinfo/#{id}"
-    "%s.L#.jpg" % res.at('thumbnail_url').inner_text if res.code == '200'
+    return nil unless res.code == '200'
+    thumb_small = res.at('thumbnail_url').inner_text
+    thumb_large = "#{thumb_small}.L"
+    headers = get_headers thumb_large
+    p headers["content-type"]
+    thumb_url = if headers["content-type"][0] == "image/jpeg"
+      thumb_large
+    else
+      thumb_small
+    end
+    "#{thumb_url}#.jpg"
   end
 
   def nicoseiga_image_url id
