@@ -9,6 +9,7 @@ gem 'eventmachine'
 gem 'redis'
 
 
+gem 'gyazo'
 gem 'twitter'
 gem 'pixiv'
 

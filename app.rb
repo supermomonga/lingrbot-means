@@ -56,8 +56,8 @@ class Bot < Sinatra::Base
   end
 
   def init_gyazo
-    # @gyazo = Gyazo::Client.new
-    # @gyazo.host = ENV['GYAZO_HOST'] || 'http://gyazo.com'
+    @gyazo = Gyazo::Client.new
+    @gyazo.host = ENV['GYAZO_HOST'] || 'http://gyazo.com'
   end
 
   def init_twitter
@@ -157,12 +157,23 @@ class Bot < Sinatra::Base
     return headers
   end
 
-  def gyazo_create binary
-
-  end
-
   def append_extension url, extension = :jpg
     "#{url}#.#{extension}"
+  end
+
+  def gyazo_create url, referer = nil
+    if url.match /(jpe?g|gif|png)$/
+      ext = $1
+    else
+      # FIXME: check file type
+      ext = "png"
+    end
+    temp_file = "tmpimage_#{Time.now.to_i}.#{ext}"
+    referer ||= url.gsub /(http:\/\/[^\/]+\/).*$/, '\1'
+    @agent.get(url, nil, referer, nil).save "./#{temp_file}"
+    gyazo_url = @gyazo.upload "#{temp_file}"
+    File.delete temp_file
+    gyazo_raw_url gyazo_url
   end
 
   def gyazo_raw_url url
