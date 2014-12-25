@@ -132,6 +132,8 @@ class Bot < Sinatra::Base
         owly_raw_url($1)
       when %r`(http://\w+\.\w.yimg.jp/.+)`
         append_extension $1
+      when %r`(http://.+-origin\.fc2\.com/.+\.(?:jpe?g|gif|png))$`
+        fc2_blog_url $1
       end
     say message['room'], response if response
     puts "Didn't match." unless response
@@ -234,6 +236,10 @@ class Bot < Sinatra::Base
   def owly_raw_url id
     # ow.ly will convert all image types to jpg
     "http://static.ow.ly/photos/normal/#{id}.jpg"
+  end
+
+  def fc2_blog_url url
+    gyazo_create url
   end
 
 end
