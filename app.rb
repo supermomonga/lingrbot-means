@@ -117,7 +117,7 @@ class Bot < Sinatra::Base
       when %r`http://(?:www|touch)?\.pixiv\.net/member\.php\?id=(\d+)`
         pixiv_member($1)
       when %r`https://twitter\.com/[^\/]+/status(?:es)?/(\d+)(?:\/photo\/\d+)?$`
-        twitter_media_url($1.to_i)
+        twitter_content($1.to_i)
       when %r`http://d\.pr/i/(\w+)$`
         droplr_raw_url($1)
       when %r`http://seiga\.nicovideo\.jp/seiga/im(\d+)`
@@ -189,9 +189,10 @@ class Bot < Sinatra::Base
     "http://d.pr/i/#{id}.png"
   end
 
-  def twitter_media_url status_id
+  def twitter_content status_id
     s = @twitter.status status_id
-    s.media.map(&:media_url_https).join("\n") if s.media?
+    text = "%sRT / %sFav\n%s" % [ s.retweet_count, s.favorite_count, s.text ]
+    text << "\n" << s.media.map(&:media_url_https).join("\n") if s.media?
   end
 
   def pixiv_member id
