@@ -191,8 +191,11 @@ class Bot < Sinatra::Base
 
   def twitter_content status_id
     s = @twitter.status status_id
-    text = "%sRT / %sFav\n%s" % [ s.retweet_count, s.favorite_count, s.text ]
+    name = s.attrs[:user][:name]
+    screen_name = s.attrs[:user][:screen_name]
+    text = "%s (@%s) - %sRT / %sFav\n%s" % [ name, screen_name, number_format(s.retweet_count), number_format(s.favorite_count), s.text ]
     text << "\n" << s.media.map(&:media_url_https).join("\n") if s.media?
+    p text
     text
   end
 
@@ -242,6 +245,10 @@ class Bot < Sinatra::Base
 
   def fc2_blog_url url
     gyazo_create url
+  end
+
+  def number_format n
+    n.to_s.reverse.chars.each_slice(3).map(&:join).join(',').reverse
   end
 
 end
