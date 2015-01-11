@@ -193,6 +193,7 @@ class Bot < Sinatra::Base
     s = @twitter.status status_id
     text = "%sRT / %sFav\n%s" % [ s.retweet_count, s.favorite_count, s.text ]
     text << "\n" << s.media.map(&:media_url_https).join("\n") if s.media?
+    text
   end
 
   def pixiv_member id
