@@ -160,7 +160,15 @@ class Bot < Sinatra::Base
   end
 
   def append_extension url, extension = :jpg
-    "#{url}#.#{extension}"
+    if has_extension? url
+      url
+    else
+      "#{url}#.#{extension}"
+    end
+  end
+
+  def has_extension? url
+    url.match /\.(jpe?g|gif|png)$/i
   end
 
   def gyazo_create url, referer = nil
