@@ -116,7 +116,7 @@ class Bot < Sinatra::Base
         nicolive_gate($1)
       when %r`http://(?:www|touch)?\.pixiv\.net/member\.php\?id=(\d+)`
         pixiv_member($1)
-      when %r`https://twitter\.com/[^\/]+/status(?:es)?/(\d+)(?:\/photo\/\d+)?$`
+      when %r`https?://twitter\.com/[^\/]+/status(?:es)?/(\d+)(?:\/photo\/\d+)?$`
         twitter_content($1.to_i)
       when %r`http://d\.pr/i/(\w+)$`
         droplr_raw_url($1)
