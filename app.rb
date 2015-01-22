@@ -134,6 +134,8 @@ class Bot < Sinatra::Base
         append_extension $1
       when %r`(http://.+-origin\.fc2\.com/.+\.(?:jpe?g|gif|png))$`
         fc2_blog_url $1
+      when %r`(https?://[^\s]+)`
+        title_for_url $1
       end
     say message['room'], response if response
     puts "Didn't match." unless response
@@ -254,6 +256,16 @@ class Bot < Sinatra::Base
 
   def fc2_blog_url url
     gyazo_create url
+  end
+
+  def title_for_url url
+    res = @agent.get url
+    if res.code == '200' && res['Content-Type'].include?('text/html')
+      title = res.at('title').tap{|it|break it.inner_text if it} ||
+        res.at('meta[property="og:title"]').tap{|it|it.attr('content') if it} ||
+        res.at('meta[property="twitter:title"]').tap{|it|it.attr('content') if it}
+      return title if title
+    end
   end
 
   def number_format n
