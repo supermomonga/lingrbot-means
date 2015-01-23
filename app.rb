@@ -144,7 +144,7 @@ class Bot < Sinatra::Base
 
   def say room_id, message
     puts "say to `#{room_id}`:"
-    LingrBot.say(room_id, ERB::Util.url_encode message)
+    LingrBot.say(room_id, ERB::Util.url_encode(message))
   end
 
   def get_headers url
