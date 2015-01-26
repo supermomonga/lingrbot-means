@@ -135,6 +135,8 @@ class Bot < Sinatra::Base
         append_extension $1
       when %r`(http://.+-origin\.fc2\.com/.+\.(?:jpe?g|gif|png))$`
         fc2_blog_url $1
+      when %r`(https?://b.hatena.ne.jp/entry/\d+/comment/[^\s]+)$`
+        hatenabookmark_comment $1
       when %r`(https?://[^\s]+)`
         title_for_url $1
       end
@@ -143,12 +145,16 @@ class Bot < Sinatra::Base
   end
 
   def say room_id, message
-    puts "say to `#{room_id}`:"
     encoded_message = message.gsub(/[&\?]/, {
       '&' => '%26',
       '?' => '%3F'
     })
-    LingrBot.say(room_id, encoded_message)
+    if ENV['RACK_ENV'] == 'development'
+      puts "say to `#{room_id}`:"
+      puts encoded_message
+    else
+      LingrBot.say(room_id, encoded_message)
+    end
   end
 
   def get_headers url
@@ -261,6 +267,18 @@ class Bot < Sinatra::Base
 
   def fc2_blog_url url
     gyazo_create url
+  end
+
+  def hatenabookmark_comment url
+    res = @agent.get url
+    container = res.at('.comment-container')
+    comment = container.at('.comment-body').inner_text
+    author = container.at('.comment-author .user-link').inner_text
+    stars_url = "http://s.hatena.ne.jp//entry.json?uri=%s" % ERB::Util.url_encode(container.at('.comment-date a').attribute('href'))
+    json = JSON.parse @agent.get(stars_url).body
+    stars = json['entries'].first['stars'].size
+    return "%s: %s" % [author, comment] if stars == 0
+    return "★%d %s: %s" % [stars, author, comment]
   end
 
   def title_for_url url
