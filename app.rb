@@ -145,15 +145,11 @@ class Bot < Sinatra::Base
   end
 
   def say room_id, message
-    encoded_message = message.gsub(/[&\?]/, {
-      '&' => '%26',
-      '?' => '%3F'
-    })
     if ENV['RACK_ENV'] == 'development'
       puts "say to `#{room_id}`:"
-      puts encoded_message
+      puts message
     else
-      LingrBot.say(room_id, encoded_message)
+      LingrBot.say(room_id, message)
     end
   end
 
