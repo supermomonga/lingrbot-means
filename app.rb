@@ -239,7 +239,8 @@ class Bot < Sinatra::Base
     else
       thumb_small
     end
-    "#{thumb_url}#.jpg"
+    title = title_for_url $1
+    "#{title}\n#{thumb_url}#.jpg"
   end
 
   def nicoseiga_image_url id
