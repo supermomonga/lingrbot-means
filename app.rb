@@ -111,8 +111,8 @@ class Bot < Sinatra::Base
       case message['text']
       when /^ping$/
         'pong'
-      when %r`http://(?:www\.nicovideo\.jp/watch|nico\.ms)/((?:sm|nm)?\d+)`
-        nicovideo($1)
+      when %r`(http://(?:www\.nicovideo\.jp/watch|nico\.ms)/((?:sm|nm)?\d+))`
+        nicovideo($1, $2)
       when %r`http://live\.nicovideo\.jp/gate/(lv\d+)`
         nicolive_gate($1)
       when %r`http://(?:www|touch)?\.pixiv\.net/member\.php\?id=(\d+)`
@@ -227,7 +227,7 @@ class Bot < Sinatra::Base
     res.at('meta[property="og:image"]').attr('content') if res.code == '200'
   end
 
-  def nicovideo id
+  def nicovideo url, id
     res = @agent.get "http://ext.nicovideo.jp/api/getthumbinfo/#{id}"
     return nil unless res.code == '200'
     thumb_small = res.at('thumbnail_url').inner_text
@@ -239,7 +239,7 @@ class Bot < Sinatra::Base
     else
       thumb_small
     end
-    title = title_for_url $1
+    title = title_for_url url
     "#{title}\n#{thumb_url}#.jpg"
   end
 
