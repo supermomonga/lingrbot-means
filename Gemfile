@@ -3,7 +3,6 @@ ruby '2.1.5'
 
 gem 'sinatra'
 gem 'unicorn'
-gem 'lingr_bot'
 gem 'mechanize'
 gem 'eventmachine'
 gem 'redis'

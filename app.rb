@@ -8,11 +8,6 @@ require 'digest/sha1'
 
 require 'sinatra/reloader' if development?
 
-LingrBot.configure do |config|
-  config.id     = ENV['BOT_ID']
-  config.secret = ENV['BOT_SECRET']
-end
-
 class Bot < Sinatra::Base
 
   configure :development do
