@@ -3,6 +3,8 @@
 require 'bundler'
 Bundler.require
 require 'erb'
+require 'open-uri'
+require 'digest/sha1'
 
 require 'sinatra/reloader' if development?
 
@@ -149,7 +151,12 @@ class Bot < Sinatra::Base
       puts "say to `#{room_id}`:"
       puts message
     else
-      LingrBot.say(room_id, message)
+      id     = ENV['BOT_ID']
+      secret = ENV['BOT_SECRET']
+      verifier = Digest::SHA1.hexdigest id + secret
+      message_encoded = ERB::Util.url_encode message
+      request_url = "http://lingr.com/api/room/say?room=#{room_id}&bot=#{id}&text=#{message_encoded}&bot_verifier=#{verifier}"
+      open request_url
     end
   end
 
