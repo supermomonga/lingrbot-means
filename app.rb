@@ -129,7 +129,9 @@ class Bot < Sinatra::Base
       when %r`http://ow\.ly/i/(\w+)`
         owly_raw_url($1)
       when %r`(http://\w+\.\w.yimg.jp/.+)`
-        append_extension $1
+        unless %r`#.jpg$` =~ $1
+          append_extension $1
+        end
       when %r`(http://.+-origin\.fc2\.com/.+\.(?:jpe?g|gif|png))$`
         fc2_blog_url $1
       when %r`(https?://b.hatena.ne.jp/entry/\d+/comment/[^\s]+)$`
