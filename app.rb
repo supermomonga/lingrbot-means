@@ -68,9 +68,9 @@ class Bot < Sinatra::Base
   end
 
   def init_pixiv
-    @pixiv = Pixiv.client ENV['PIXIV_ID'], ENV['PIXIV_PASSWORD'] do |config|
-      config.user_agent_alias = 'Mac Safari'
-    end
+    # @pixiv = Pixiv.client ENV['PIXIV_ID'], ENV['PIXIV_PASSWORD'] do |config|
+    #   config.user_agent_alias = 'Mac Safari'
+    # end
   end
 
   def init_queues
@@ -112,8 +112,8 @@ class Bot < Sinatra::Base
         nicovideo($1, $2)
       when %r`http://live\.nicovideo\.jp/gate/(lv\d+)`
         nicolive_gate($1)
-      when %r`http://(?:www|touch)?\.pixiv\.net/member\.php\?id=(\d+)`
-        pixiv_member($1)
+      # when %r`http://(?:www|touch)?\.pixiv\.net/member\.php\?id=(\d+)`
+      #   pixiv_member($1)
       when %r`https?://(?:mobile\.)?twitter\.com/[^\/]+/status(?:es)?/(\d+)(?:\/photo\/\d+)?$`
         twitter_content($1.to_i)
       when %r`http://d\.pr/i/(\w+)$`
