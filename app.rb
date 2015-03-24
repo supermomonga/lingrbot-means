@@ -134,6 +134,8 @@ class Bot < Sinatra::Base
         fc2_blog_url $1
       when %r`(https?://b.hatena.ne.jp/entry/\d+/comment/[^\s]+)$`
         hatenabookmark_comment $1
+      when %r`(https?://ask.fm/.+/answer/\d+)`
+        askfm $1
       when %r`(https?://[^\s]+)`
         title_for_url $1
       end
@@ -278,6 +280,13 @@ class Bot < Sinatra::Base
     stars = json['entries'].first['stars'].size
     return "%s: %s" % [author, comment] if stars == 0
     return "★%d %s: %s" % [stars, author, comment]
+  end
+
+  def askfm url
+    res = @agent.get url
+    q = res.at('.question').inner_text
+    a = res.at('.answer').inner_text
+    return "Q: %s\nA: %s" % [q, a]
   end
 
   def title_for_url url
