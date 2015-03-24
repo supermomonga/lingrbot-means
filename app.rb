@@ -136,6 +136,8 @@ class Bot < Sinatra::Base
         hatenabookmark_comment $1
       when %r`(https?://ask.fm/.+/answer/\d+)`
         askfm $1
+      when %r`https?://p.twipple.jp/(\w+)`
+        twipple_photo $1
       when %r`(https?://[^\s]+)`
         title_for_url $1
       end
@@ -287,6 +289,10 @@ class Bot < Sinatra::Base
     q = res.at('.question').inner_text
     a = res.at('.answer').inner_text
     return "Q: %s\nA: %s" % [q, a]
+  end
+
+  def twipple_photo id
+    "http://p.twpl.jp/show/large/#{id}#.jpg"
   end
 
   def title_for_url url
