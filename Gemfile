@@ -9,7 +9,7 @@ gem 'redis'
 
 
 gem 'gyazo'
-gem 'twitter'
+gem 'twitter', '~> 5.14.0'
 gem 'pixiv'
 
 group :development do
