@@ -14,7 +14,7 @@ GEM
       dotenv-deployment (~> 0.0.2)
     dotenv-deployment (0.0.2)
     equalizer (0.0.11)
-    eventmachine (1.0.3)
+    eventmachine (1.0.7)
     faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.3)
@@ -150,7 +150,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  eventmachine
+  eventmachine (~> 1.0.4)
   foreman
   guard-rspec
   gyazo
