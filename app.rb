@@ -146,6 +146,7 @@ class Bot < Sinatra::Base
   end
 
   def say room_id, message
+    message = convert_emoji message
     if ENV['RACK_ENV'] == 'development'
       puts "say to `#{room_id}`:"
       puts message
@@ -157,6 +158,15 @@ class Bot < Sinatra::Base
       request_url = "http://lingr.com/api/room/say?room=#{room_id}&bot=#{id}&text=#{message_encoded}&bot_verifier=#{verifier}"
       open request_url
     end
+  end
+
+  def convert_emoji text
+    text.chars.map{|chr|
+      chr.tap{|chr|
+        emoji = Emoji.find_by_unicode chr
+        break "[%s]" % emoji.name if emoji
+      }
+    }.join
   end
 
   def get_headers url

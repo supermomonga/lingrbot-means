@@ -4,13 +4,14 @@ ruby '2.2.1'
 gem 'sinatra'
 gem 'unicorn'
 gem 'mechanize'
-gem 'eventmachine'
+gem 'eventmachine', '~> 1.0.4'
 gem 'redis'
 
 
 gem 'gyazo'
 gem 'twitter', '~> 5.14.0'
 gem 'pixiv'
+gem 'gemoji'
 
 group :development do
   gem 'sinatra-contrib'
