@@ -12,6 +12,7 @@ gem 'gyazo'
 gem 'twitter', '~> 5.14.0'
 gem 'pixiv'
 gem 'gemoji'
+gem 'gemoji-parser'
 
 group :development do
   gem 'sinatra-contrib'

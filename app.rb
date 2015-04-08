@@ -161,12 +161,9 @@ class Bot < Sinatra::Base
   end
 
   def convert_emoji text
-    text.chars.map{|chr|
-      chr.tap{|chr|
-        emoji = Emoji.find_by_unicode chr
-        break "[%s]" % emoji.name if emoji
-      }
-    }.join
+    EmojiParser.parse_unicode(text) {|emoji|
+      "[%s]" % emoji.name
+    }
   end
 
   def get_headers url
