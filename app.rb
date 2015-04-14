@@ -308,7 +308,8 @@ class Bot < Sinatra::Base
     res = @agent.get url
     title = res.at('.title h2').inner_text.strip
     images = res.search('.entry a img').map{|it| it['src']}.join "\n"
-    return "#{title}\n#{images}"
+    description = res.search('.entry .separator')[1].inner_text.strip
+    return "【#{title}】\n#{description}\n#{images}"
   end
 
   def title_for_url url
