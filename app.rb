@@ -138,7 +138,7 @@ class Bot < Sinatra::Base
         askfm $1
       when %r`https?://p.twipple.jp/(\w+)`
         twipple_photo $1
-      when %r`(http://www.irasutoya.com/\d+/\d+/blog-post_\d+.html)`
+      when %r`(http://www.irasutoya.com/\d+/\d+/[a-z0-9_]+.html)`
         irasutoya_illust $1
       when %r`(https?://[^\s]+)`
         title_for_url $1
