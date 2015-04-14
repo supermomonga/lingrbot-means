@@ -138,6 +138,8 @@ class Bot < Sinatra::Base
         askfm $1
       when %r`https?://p.twipple.jp/(\w+)`
         twipple_photo $1
+      when %r`(http://www.irasutoya.com/\d+/\d+/blog-post_\d+.html)`
+        irasutoya_illust $1
       when %r`(https?://[^\s]+)`
         title_for_url $1
       end
@@ -300,6 +302,13 @@ class Bot < Sinatra::Base
 
   def twipple_photo id
     "http://p.twpl.jp/show/large/#{id}#.jpg"
+  end
+
+  def irasutoya_illust url
+    res = @agent.get url
+    title = res.at('.title h2').inner_text.strip
+    images = res.search('.entry a img').map{|it| it['src']}.join "\n"
+    return "#{title}\n#{images}"
   end
 
   def title_for_url url
