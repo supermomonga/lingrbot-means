@@ -140,6 +140,8 @@ class Bot < Sinatra::Base
         twipple_photo $1
       when %r`(http://www.irasutoya.com/\d+/\d+/[a-z0-9_-]+.html)`
         irasutoya_illust $1
+      when %r`https?://www.dropbox.com/(.+\.(?:jpe?g|gif|png))\?dl=0`
+        dropbox_image_raw_url $1
       when %r`(https?://[^\s]+)`
         title_for_url $1
       end
@@ -310,6 +312,10 @@ class Bot < Sinatra::Base
     images = res.search('.entry a img').map{|it| it['src']}.join "\n"
     description = res.search('.entry .separator')[1].inner_text.strip
     return "【#{title}】\n#{description}\n#{images}"
+  end
+
+  def dropbox_image_raw_url url
+    "https://dl.dropboxusercontent.com/#{url}"
   end
 
   def title_for_url url
