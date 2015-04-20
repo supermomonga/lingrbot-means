@@ -142,6 +142,8 @@ class Bot < Sinatra::Base
         irasutoya_illust $1
       when %r`https?://www.dropbox.com/(.+\.(?:jpe?g|gif|png))\?dl=0`
         dropbox_image_raw_url $1
+      when %r`(https?://i.imgur.com/[0-9a-zA-Z]+\.gifv)`
+        append_extension $1, :gif
       when %r`(https?://[^\s]+)`
         title_for_url $1
       end
