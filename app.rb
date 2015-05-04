@@ -155,24 +155,22 @@ class Bot < Sinatra::Base
     message = convert_emoji message
     if ENV['RACK_ENV'] == 'development'
       puts "say to `#{room_id}`:"
-      puts message
+      puts decode_for_lingr message
     else
       id     = ENV['BOT_ID']
       secret = ENV['BOT_SECRET']
       verifier = Digest::SHA1.hexdigest id + secret
-      message_encoded = encode_for_lingr message
+      message_encoded = ERB::Util.url_encode(decode_for_lingr message)
       request_url = "http://lingr.com/api/room/say?room=#{room_id}&bot=#{id}&text=#{message_encoded}&bot_verifier=#{verifier}"
       open request_url
     end
   end
 
-  def encode_for_lingr message
-    ERB::Util.url_encode(message).gsub(/&[a-z]{1,3};/,
-                                       {
-                                         '&lt;' => '<',
-                                         '&gt;' => '>'
-                                       }
-                                      )
+  def decode_for_lingr message
+    message.gsub(/&(lt|gt);/, {
+                   '&lt;' => '<',
+                   '&gt;' => '>'
+                 })
   end
 
   def convert_emoji text
