@@ -3,7 +3,6 @@
 require 'bundler'
 Bundler.require
 require 'erb'
-require 'date'
 require 'open-uri'
 require 'digest/sha1'
 
@@ -236,7 +235,8 @@ class Bot < Sinatra::Base
   def twitter_content status_id
     s = @twitter.status status_id
     name = s.attrs[:user][:name]
-    date = Date.parse(s.created_at).strftime('%Y/%m/%d %H:%M:%S')
+    p s.created_at.class
+    date = s.created_at.strftime('%Y/%m/%d %H:%M:%S')
     screen_name = s.attrs[:user][:screen_name]
     text = "%s (@%s) - %sRT / %sFav %s\n%s" % [ name, screen_name, number_format(s.retweet_count), number_format(s.favorite_count), date, s.text ]
     text << "\n" << s.media.map(&:media_url_https).join("\n") if s.media?
