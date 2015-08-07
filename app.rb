@@ -108,29 +108,29 @@ class Bot < Sinatra::Base
       case message['text']
       when /^ping$/
         'pong'
-      when %r`(http://(?:www\.nicovideo\.jp/watch|nico\.ms)/((?:sm|nm)?\d+))`
+      when %r`(https?://(?:www\.nicovideo\.jp/watch|nico\.ms)/((?:sm|nm)?\d+))`
         nicovideo($1, $2)
-      when %r`http://live\.nicovideo\.jp/gate/(lv\d+)`
+      when %r`https?://live\.nicovideo\.jp/gate/(lv\d+)`
         nicolive_gate($1)
-      # when %r`http://(?:www|touch)?\.pixiv\.net/member\.php\?id=(\d+)`
+      # when %r`https?://(?:www|touch)?\.pixiv\.net/member\.php\?id=(\d+)`
       #   pixiv_member($1)
       when %r`https?://(?:mobile\.)?twitter\.com/[^\/]+/status(?:es)?/(\d+)(?:\/photo\/\d+)?$`
         twitter_content($1.to_i)
-      when %r`http://d\.pr/i/(\w+)$`
+      when %r`https?://d\.pr/i/(\w+)$`
         droplr_raw_url($1)
-      when %r`http://seiga\.nicovideo\.jp/seiga/im(\d+)`
+      when %r`https?://seiga\.nicovideo\.jp/seiga/im(\d+)`
         nicoseiga_image_url($1.to_i)
-      when %r`(http://seiga\.nicovideo\.jp/watch/mg\d+)`
+      when %r`(https?://seiga\.nicovideo\.jp/watch/mg\d+)`
         nicoseiga_comic_thumb_url($1)
-      when %r`(http://seiga\.nicovideo\.jp/comic/\d+)`
+      when %r`(https?://seiga\.nicovideo\.jp/comic/\d+)`
         nicoseiga_comic_main_url($1)
-      when %r`(http://gyazo\.com/\w+)$`
+      when %r`(https?://gyazo\.com/\w+)$`
         gyazo_raw_url($1)
-      when %r`http://ow\.ly/i/(\w+)`
+      when %r`https?://ow\.ly/i/(\w+)`
         owly_raw_url($1)
-      when %r`(http://\w+\.\w.yimg.jp/.+)`
+      when %r`(https?://\w+\.\w.yimg.jp/.+)`
         append_extension $1
-      when %r`(http://.+-origin\.fc2\.com/.+\.(?:jpe?g|gif|png))$`
+      when %r`(https?://.+-origin\.fc2\.com/.+\.(?:jpe?g|gif|png))$`
         fc2_blog_url $1
       when %r`(https?://b.hatena.ne.jp/entry/\d+/comment/[^\s]+)$`
         hatenabookmark_comment $1
@@ -138,7 +138,7 @@ class Bot < Sinatra::Base
         askfm $1
       when %r`https?://p.twipple.jp/(\w+)`
         twipple_photo $1
-      when %r`(http://www.irasutoya.com/\d+/\d+/[a-z0-9_-]+.html)`
+      when %r`(https?://www.irasutoya.com/\d+/\d+/[a-z0-9_-]+.html)`
         irasutoya_illust $1
       when %r`https?://www.dropbox.com/(.+\.(?:jpe?g|gif|png))\?dl=0`
         dropbox_image_raw_url $1
