@@ -240,6 +240,7 @@ class Bot < Sinatra::Base
     screen_name = s.attrs[:user][:screen_name]
     text = "%s (@%s) - %sRT / %sFav %s\n%s" % [ name, screen_name, number_format(s.retweet_count), number_format(s.favorite_count), date, s.text ]
     text << "\n" << s.media.map(&:media_url_https).join("\n") if s.media?
+    text.gsub!(/(?=\n)(?<=\n)/m, '　')
     # require 'pp'
     # pp s.attrs
     text
