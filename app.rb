@@ -25,11 +25,17 @@ class Bot < Sinatra::Base
   end
 
   post '/' do
-    enqueue *JSON.parse(request.body.read)['events'].map{ |e|
-      e['message']
-    }
-    content_type :text
-    ''
+    if ENV['RACK_ENV'] == 'test'
+      JSON.parse(request.body.read)['events'].map{ |e|
+        handle_message e['message']
+      }.join("\n")
+    else
+      enqueue *JSON.parse(request.body.read)['events'].map{ |e|
+        e['message']
+      }
+      content_type :text
+      ''
+    end
   end
 
   get '/' do
@@ -152,9 +158,11 @@ class Bot < Sinatra::Base
 
   def say room_id, message
     message = convert_emoji message
-    if ENV['RACK_ENV'] == 'development'
+    case ENV['RACK_ENV']
+    when 'development'
       puts "say to `#{room_id}`:"
       puts decode_for_lingr message
+    when 'test'
     else
       id     = ENV['BOT_ID']
       secret = ENV['BOT_SECRET']
