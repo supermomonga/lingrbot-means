@@ -101,7 +101,8 @@ class Bot < Sinatra::Base
         sleep 0.5
         next if @queues.empty?
         begin
-          response = handle_message dequeue
+          message = dequeue
+          response = handle_message message
           say message['room'], response if response
           puts "Didn't match." unless response
         rescue => e
