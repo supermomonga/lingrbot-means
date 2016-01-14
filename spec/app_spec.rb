@@ -2,9 +2,8 @@
 
 ENV['RACK_ENV'] = 'test'
 
-$:.unshift File.dirname(__FILE__) + '/../'
-require 'app.rb'
-require 'spec_helper'
+require_relative '../app'
+require_relative './spec_helper'
 require 'json'
 require 'rack/test'
 
