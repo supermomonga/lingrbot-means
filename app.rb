@@ -240,12 +240,12 @@ class Bot < Sinatra::Base
     screen_name = s.attrs[:user][:screen_name]
     text = "%s (@%s) - %sRT / %sFav %s\n%s" % [ name, screen_name, number_format(s.retweet_count), number_format(s.favorite_count), date, s.text ]
     if s.media?
-      s.media.each do |media|
-        case media
+      s.media.each do |medium|
+        case medium
         when Twitter::Media::Photo
-          text << "\n" << media.map(&:media_url_https)
+          text << "\n" << medium.media_url_https
         when Twitter::Media::Video, Twitter::Media::AnimatedGif
-          text << "\n" << media.video_info.variants.select{ |v| v.content_type == 'video/mp4' }.max{ |a, b| a.bitrate <=> b.bitrate }.attrs[:url]
+          text << "\n" << medium.video_info.variants.select{ |v| v.content_type == 'video/mp4' }.max{ |a, b| a.bitrate <=> b.bitrate }.attrs[:url]
         end
       end
     end
