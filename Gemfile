@@ -14,9 +14,10 @@ gem 'pixiv'
 gem 'gemoji'
 gem 'gemoji-parser'
 
-group :development do
+group :development, :test do
   gem 'sinatra-contrib'
   gem 'foreman'
+  gem 'rack-test'
   gem 'rspec'
   gem 'guard-rspec', require: false
 end
