@@ -239,7 +239,16 @@ class Bot < Sinatra::Base
     date = s.created_at.getlocal("+09:00").strftime('%Y/%m/%d %H:%M:%S')
     screen_name = s.attrs[:user][:screen_name]
     text = "%s (@%s) - %sRT / %sFav %s\n%s" % [ name, screen_name, number_format(s.retweet_count), number_format(s.favorite_count), date, s.text ]
-    text << "\n" << s.media.map(&:media_url_https).join("\n") if s.media?
+    if s.media?
+      s.media.each do |medium|
+        case medium
+        when Twitter::Media::Photo
+          text << "\n" << medium.media_url_https
+        when Twitter::Media::Video, Twitter::Media::AnimatedGif
+          text << "\n" << medium.video_info.variants.select{ |v| v.content_type == 'video/mp4' }.max{ |a, b| a.bitrate <=> b.bitrate }.attrs[:url]
+        end
+      end
+    end
     text.gsub!(/(?=\n)(?<=\n)/m, '　')
     # require 'pp'
     # pp s.attrs
