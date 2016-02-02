@@ -17,6 +17,7 @@ gem 'gemoji-parser'
 group :development, :test do
   gem 'sinatra-contrib'
   gem 'foreman'
+  gem 'rake', require: false
   gem 'rack-test'
   gem 'rspec'
   gem 'guard-rspec', require: false
