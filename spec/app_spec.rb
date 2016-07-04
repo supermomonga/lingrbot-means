@@ -55,6 +55,6 @@ https://pbs.twimg.com/media/CZ4H6I5WcAAbBGo.jpg')
   it 'pixiv R-18' do
     post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=medium&illust_id=57723566')
     expect(last_response).to be_ok
-    expect(last_response.body).to match(%r`生命に危険を及ぼす程のオシャレ \(by 山田の性活が第一\)\nhttp://.+\.pixiv\.net/c/\d+x\d+/img-\w+/img/.+\.jpg`)
+    expect(last_response.body).to match(%r`^\[R-18\] 生命に危険を及ぼす程のオシャレ \(by 山田の性活が第一\)\nhttp://.+\.pixiv\.net/c/\d+x\d+/img-\w+/img/.+\.jpg$`)
   end
 end

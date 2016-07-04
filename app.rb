@@ -274,14 +274,18 @@ class Bot < Sinatra::Base
     res = @agent.get "http://www.pixiv.net/member_illust.php?illust_id=#{id}&mode=medium"
     if res.code == '200'
       meta = res.at('meta[property="og:title"]').attr('content')
+      r18 = res.at('.twitter-share-button').attr('data-text').include?('[R-18]')
       title, author = meta.scan(/「([^」]+)」/).flatten
       illust_url = res.at('meta[property="og:image"]').attr('content')
       # for R-18 illust
-      puts illust_url
       if illust_url.empty?
         illust_url = res.at('.sensored img').attr('src')
       end
-      "%s (by %s)\n%s" % [ title, author, append_extension(illust_url) ]
+      if r18
+        "[R-18] %s (by %s)\n%s" % [ title, author, append_extension(illust_url) ]
+      else
+        "%s (by %s)\n%s" % [ title, author, append_extension(illust_url) ]
+      end
     end
   end
 
