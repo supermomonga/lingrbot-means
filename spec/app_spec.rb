@@ -43,6 +43,18 @@ https://pbs.twimg.com/media/CZ4H6I5WcAAbBGo.jpg')
   it 'pixiv' do
     post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=medium&illust_id=54003739')
     expect(last_response).to be_ok
-    expect(last_response.body).to eq('【アイドルマスターシンデレラガールズ】「【サンプルと告知】志乃楓合同発行します【12/18　追記あり】」イラスト/紺@木曜西ち17b [pixiv]')
+    expect(last_response.body).to eq("【サンプルと告知】志乃楓合同発行します【12/18　追記あり】 (by 紺@シンステ　レ-8)\nhttp://embed.pixiv.net/decorate.php?illust_id=54003739#.jpg")
+  end
+
+  it 'pixiv2' do
+    post '/', create_message_json('http://www.pixiv.net/member_illust.php?illust_id=57708370&mode=medium')
+    expect(last_response).to be_ok
+    expect(last_response.body).to eq("土曜の昼とかにランチ作るエリみほ (by 梵辛@３日目東ニ５４ｂ)\nhttp://embed.pixiv.net/decorate.php?illust_id=57708370#.jpg")
+  end
+
+  it 'pixiv R-18' do
+    post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=medium&illust_id=57723566')
+    expect(last_response).to be_ok
+    expect(last_response.body).to match(%r`生命に危険を及ぼす程のオシャレ \(by 山田の性活が第一\)\nhttp://.+\.pixiv\.net/c/\d+x\d+/img-\w+/img/.+\.jpg`)
   end
 end

@@ -122,6 +122,8 @@ class Bot < Sinatra::Base
       nicolive_gate($1)
     # when %r`https?://(?:www|touch)?\.pixiv\.net/member\.php\?id=(\d+)`
     #   pixiv_member($1)
+    when %r`https?://(?:www|touch)?\.pixiv\.net/member_illust\.php.*illust_id=(\d+)`
+      pixiv_illust($1)
     when %r`https?://(?:mobile\.)?twitter\.com/[^\/]+/status(?:es)?/(\d+)(?:\/photo\/\d+)?$`
       twitter_content($1.to_i)
     when %r`https?://d\.pr/i/(\w+)$`
@@ -266,6 +268,21 @@ class Bot < Sinatra::Base
   def pixiv_member id
     member = @pixiv.member id
     member.profile_image_url
+  end
+
+  def pixiv_illust id
+    res = @agent.get "http://www.pixiv.net/member_illust.php?illust_id=#{id}&mode=medium"
+    if res.code == '200'
+      meta = res.at('meta[property="og:title"]').attr('content')
+      title, author = meta.scan(/「([^」]+)」/).flatten
+      illust_url = res.at('meta[property="og:image"]').attr('content')
+      # for R-18 illust
+      puts illust_url
+      if illust_url.empty?
+        illust_url = res.at('.sensored img').attr('src')
+      end
+      "%s (by %s)\n%s" % [ title, author, append_extension(illust_url) ]
+    end
   end
 
   def nicolive_gate id
