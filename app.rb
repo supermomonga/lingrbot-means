@@ -66,7 +66,7 @@ class Bot < Sinatra::Base
 
   def init_twitter
     @twitter = Twitter::REST::Client.new do |config|
-      config.bearer_token        = ENV['TWITTER_BEARER_TOKEN']
+      config.bearer_token        = ENV['TWITTER_BEARER_TOKEN'] || YAML.load_file('.travis.yml')['env']['global'].split('=')[1].delete("'")
     end
   end
 
