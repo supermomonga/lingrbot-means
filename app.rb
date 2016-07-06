@@ -242,7 +242,6 @@ class Bot < Sinatra::Base
   def twitter_content status_id
     s = @twitter.status status_id
     name = s.attrs[:user][:name]
-    p s.created_at.class
     date = s.created_at.getlocal("+09:00").strftime('%Y/%m/%d %H:%M:%S')
     screen_name = s.attrs[:user][:screen_name]
     text = "%s (@%s) - %sRT / %sFav %s\n%s" % [ name, screen_name, number_format(s.retweet_count), number_format(s.favorite_count), date, s.text ]
