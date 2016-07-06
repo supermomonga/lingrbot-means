@@ -66,10 +66,7 @@ class Bot < Sinatra::Base
 
   def init_twitter
     @twitter = Twitter::REST::Client.new do |config|
-      config.consumer_key        = ENV['TWITTER_CONSUMER_KEY']
-      config.consumer_secret     = ENV['TWITTER_CONSUMER_SECRET']
-      config.access_token        = ENV['TWITTER_ACCESS_TOKEN']
-      config.access_token_secret = ENV['TWITTER_ACCESS_SECRET']
+      config.bearer_token        = ENV['TWITTER_BEARER_TOKEN']
     end
   end
 
@@ -245,7 +242,6 @@ class Bot < Sinatra::Base
   def twitter_content status_id
     s = @twitter.status status_id
     name = s.attrs[:user][:name]
-    p s.created_at.class
     date = s.created_at.getlocal("+09:00").strftime('%Y/%m/%d %H:%M:%S')
     screen_name = s.attrs[:user][:screen_name]
     text = "%s (@%s) - %sRT / %sFav %s\n%s" % [ name, screen_name, number_format(s.retweet_count), number_format(s.favorite_count), date, s.text ]
