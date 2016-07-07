@@ -83,8 +83,6 @@ GEM
       nenv (~> 0.1)
       shellany (~> 0.0)
     ntlm-http (0.1.1)
-    pixiv (0.0.9)
-      mechanize (~> 2.0)
     pry (0.10.3)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -161,7 +159,6 @@ DEPENDENCIES
   guard-rspec
   gyazo
   mechanize
-  pixiv
   rack-test
   rake
   redis

@@ -19,7 +19,6 @@ class Bot < Sinatra::Base
     init_redis
     init_gyazo
     init_twitter
-    init_pixiv
     spawn_worker
     super
   end
@@ -70,12 +69,6 @@ class Bot < Sinatra::Base
     end
   end
 
-  def init_pixiv
-    # @pixiv = Pixiv.client ENV['PIXIV_ID'], ENV['PIXIV_PASSWORD'] do |config|
-    #   config.user_agent_alias = 'Mac Safari'
-    # end
-  end
-
   def init_queues
     puts "Initialize queues." unless @queues
     @queues ||= []
@@ -117,8 +110,6 @@ class Bot < Sinatra::Base
       nicovideo($1, $2)
     when %r`https?://live\.nicovideo\.jp/gate/(lv\d+)`
       nicolive_gate($1)
-    # when %r`https?://(?:www|touch)?\.pixiv\.net/member\.php\?id=(\d+)`
-    #   pixiv_member($1)
     when %r`https?://(?:www|touch)?\.pixiv\.net/member_illust\.php.*illust_id=(\d+)`
       pixiv_illust($1)
     when %r`https?://(?:mobile\.)?twitter\.com/[^\/]+/status(?:es)?/(\d+)(?:\/photo\/\d+)?$`
@@ -259,11 +250,6 @@ class Bot < Sinatra::Base
     # require 'pp'
     # pp s.attrs
     text
-  end
-
-  def pixiv_member id
-    member = @pixiv.member id
-    member.profile_image_url
   end
 
   def pixiv_illust id
