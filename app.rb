@@ -103,48 +103,72 @@ class Bot < Sinatra::Base
   end
 
   def handle_message message
-    case message['text']
-    when /^ping$/
+    text = message['text']
+    if text == 'ping'
       'pong'
-    when %r`(https?://(?:www\.nicovideo\.jp/watch|nico\.ms)/((?:sm|nm)?\d+))`
-      nicovideo($1, $2)
-    when %r`https?://live\.nicovideo\.jp/gate/(lv\d+)`
-      nicolive_gate($1)
-    when %r`https?://(?:www|touch)?\.pixiv\.net/member_illust\.php.*illust_id=(\d+)`
-      pixiv_illust($1)
-    when %r`https?://(?:mobile\.)?twitter\.com/[^\/]+/status(?:es)?/(\d+)(?:\/photo\/\d+)?$`
-      twitter_content($1.to_i)
-    when %r`https?://d\.pr/i/(\w+)$`
-      droplr_raw_url($1)
-    when %r`https?://seiga\.nicovideo\.jp/seiga/im(\d+)`
-      nicoseiga_image_url($1.to_i)
-    when %r`(https?://seiga\.nicovideo\.jp/watch/mg\d+)`
-      nicoseiga_comic_thumb_url($1)
-    when %r`(https?://seiga\.nicovideo\.jp/comic/\d+)`
-      nicoseiga_comic_main_url($1)
-    when %r`(https?://gyazo\.com/\w+)$`
-      gyazo_raw_url($1)
-    when %r`https?://ow\.ly/i/(\w+)`
-      owly_raw_url($1)
-    when %r`(https?://\w+\.\w.yimg.jp/.+)`
-      append_extension $1
-    when %r`(https?://.+-origin\.fc2\.com/.+\.(?:jpe?g|gif|png))$`
-      fc2_blog_url $1
-    when %r`(https?://b.hatena.ne.jp/entry/\d+/comment/[^\s]+)$`
-      hatenabookmark_comment $1
-    when %r`(https?://ask.fm/.+/answer/\d+)`
-      askfm $1
-    when %r`https?://p.twipple.jp/(\w+)`
-      twipple_photo $1
-    when %r`(https?://www.irasutoya.com/\d+/\d+/[a-z0-9_-]+.html)`
-      irasutoya_illust $1
-    when %r`https?://www.dropbox.com/(.+\.(?:jpe?g|gif|png))\?dl=0`
-      dropbox_image_raw_url $1
-    when %r`(https?://i.imgur.com/[0-9a-zA-Z]+\.gif)v`
-      $1
-    when %r`(https?://[^\s]+)`
-      title_for_url $1
+    else
+      results = []
+      while text.size > 0
+        remainder, result = process_pattern text
+        if remainder.nil?
+          text = ''
+        else
+          results << result
+          text = remainder
+        end
+      end
+      results.join("\n")
     end
+  end
+
+  def process_pattern text
+    patterns = {
+      %r`(https?://(?:www\.nicovideo\.jp/watch|nico\.ms)/((?:sm|nm)?\d+))` =>
+        proc { nicovideo($1, $2) },
+      %r`https?://live\.nicovideo\.jp/gate/(lv\d+)` =>
+        proc { nicolive_gate($1) },
+      %r`https?://(?:www|touch)?\.pixiv\.net/member_illust\.php.*illust_id=(\d+)` =>
+        proc { pixiv_illust($1) },
+      %r`https?://(?:mobile\.)?twitter\.com/[^\/]+/status(?:es)?/(\d+)(?:\/photo\/\d+)?$` =>
+        proc { twitter_content($1.to_i) },
+      %r`https?://d\.pr/i/(\w+)$` =>
+        proc { droplr_raw_url($1) },
+      %r`https?://seiga\.nicovideo\.jp/seiga/im(\d+)` =>
+        proc { nicoseiga_image_url($1.to_i) },
+      %r`(https?://seiga\.nicovideo\.jp/watch/mg\d+)` =>
+        proc { nicoseiga_comic_thumb_url($1) },
+      %r`(https?://seiga\.nicovideo\.jp/comic/\d+)` =>
+        proc { nicoseiga_comic_main_url($1) },
+      %r`(https?://gyazo\.com/\w+)$` =>
+        proc { gyazo_raw_url($1) },
+      %r`https?://ow\.ly/i/(\w+)` =>
+        proc { owly_raw_url($1) },
+      %r`(https?://\w+\.\w.yimg.jp/.+)` =>
+        proc { append_extension $1 },
+      %r`(https?://.+-origin\.fc2\.com/.+\.(?:jpe?g|gif|png))$` =>
+        proc { fc2_blog_url $1 },
+      %r`(https?://b.hatena.ne.jp/entry/\d+/comment/[^\s]+)$` =>
+        proc { hatenabookmark_comment $1 },
+      %r`(https?://ask.fm/.+/answer/\d+)` =>
+        proc { askfm $1 },
+      %r`https?://p.twipple.jp/(\w+)` =>
+        proc { twipple_photo $1 },
+      %r`(https?://www.irasutoya.com/\d+/\d+/[a-z0-9_-]+.html)` =>
+        proc { irasutoya_illust $1 },
+      %r`https?://www.dropbox.com/(.+\.(?:jpe?g|gif|png))\?dl=0` =>
+        proc { dropbox_image_raw_url $1 },
+      %r`(https?://i.imgur.com/[0-9a-zA-Z]+\.gif)v` =>
+        proc { $1 },
+      %r`(https?://[^\s]+)` =>
+        proc { title_for_url $1 }
+    }
+    patterns.each { |regexp, process|
+      if regexp.match(text)
+        remainder = $'
+        return [remainder, process.call]
+      end
+    }
+    [nil, nil]
   end
 
   def say room_id, message
