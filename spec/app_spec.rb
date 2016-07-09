@@ -64,7 +64,7 @@ https://pbs.twimg.com/media/CZ4H6I5WcAAbBGo.jpg')
     expect(last_response.body).to match(%r`^\[R-18\] 生命に危険を及ぼす程のオシャレ \(by 山田の性活が第一\)\nhttp://.+\.pixiv\.net/c/\d+x\d+/img-\w+/img/.+\.jpg$`)
   end
 
-  it 'multi' do
+  it 'multi URL' do
     post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=medium&illust_id=54003739 https://twitter.com/kumikumitm/status/693000092534587392')
     expect(last_response).to be_ok
     expect(last_response.body).to eq("【サンプルと告知】志乃楓合同発行します【12/18　追記あり】 (by 紺@シンステ　レ-8)
@@ -73,5 +73,15 @@ Kumi TM (@kumikumitm) - 1RT / 5Fav 2016/01/29 18:17:52
 #ggjsap @raa0121 働いておる https://t.co/Czqc94p4yg
 https://pbs.twimg.com/media/CZ4H5jxWkAAHC6w.jpg
 https://pbs.twimg.com/media/CZ4H6I5WcAAbBGo.jpg")
+  end
+
+  it 'multi URL with multi line' do
+    post '/', create_message_json('http://avex.jp/pripara/discography/detail.php?id=1010630
+1
+http://avex.jp/pripara/1st/discography/
+2')
+    expect(last_response).to be_ok
+    expect(last_response.body).to eq("プリパラ☆ミュージックコレクションDX／プリパラ☆ミュージックコレクション DVD/CD | TVアニメ「プリパラ」DVD・CD公式ホームページ
+DVD/CD | TVアニメ「プリパラ」BD・DVD・CD公式ホームページ")
   end
 end
