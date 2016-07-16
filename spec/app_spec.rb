@@ -67,7 +67,7 @@ https://pbs.twimg.com/media/CZ4H6I5WcAAbBGo.jpg')
   it 'nijie' do
     post '/', create_message_json('http://nijie.info/view.php?id=23460')
     expect(last_response).to be_ok
-    expect(last_response.body).to eq("（粘膜）密着！スペルマポリス２４ | ぶぶのすけ\nhttp://pic02.nijie.info/small_light%28dw=70%29/nijie_picture/2908_20120912222900.jpg")
+    expect(last_response.body).to eq("（粘膜）密着！スペルマポリス２４ | ぶぶのすけ\nhttps://pic02.nijie.info/small_light%28dw=70%29/nijie_picture/2908_20120912222900.jpg")
   end
 
   it 'multi URL' do
