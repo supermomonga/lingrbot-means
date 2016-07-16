@@ -129,6 +129,8 @@ class Bot < Sinatra::Base
         proc { nicolive_gate($1) },
       %r`https?://(?:www|touch)?\.pixiv\.net/member_illust\.php.*illust_id=(\d+)` =>
         proc { pixiv_illust($1) },
+      %r`http://nijie\.info/view\.php\?id=(\d+)` =>
+        proc { nijie_illust($1) },
       %r`https?://(?:mobile\.)?twitter\.com/[^\/]+/status(?:es)?/(\d+)(?:\/photo\/\d+)?$` =>
         proc { twitter_content($1.to_i) },
       %r`https?://d\.pr/i/(\w+)$` =>
@@ -292,6 +294,15 @@ class Bot < Sinatra::Base
       else
         "%s (by %s)\n%s" % [ title, author, append_extension(illust_url) ]
       end
+    end
+  end
+
+  def nijie_illust id
+    res = @agent.get "http://nijie.info/view.php?id=#{id}"
+    if res.code == '200'
+      title = res.at('meta[property="og:title"]').attr('content')
+      illust_url = res.at('meta[property="og:image"]').attr('content').gsub(/nijie_picture\/sp/, 'small_light%28dw=70%29/nijie_picture')
+      "%s\n%s" % [ title, illust_url ]
     end
   end
 
