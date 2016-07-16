@@ -47,21 +47,21 @@ https://pbs.twimg.com/media/CZ4H6I5WcAAbBGo.jpg')
   end
 
   it 'pixiv' do
-    post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=medium&illust_id=54003739')
+    post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=medium&illust_id=36540187')
     expect(last_response).to be_ok
-    expect(last_response.body).to eq("【サンプルと告知】志乃楓合同発行します【12/18　追記あり】 (by 紺@シンステ　レ-8)\nhttp://embed.pixiv.net/decorate.php?illust_id=54003739#.jpg")
+    expect(last_response.body).to eq("ワンワン霊体験 (by 押切蓮介)\nhttp://embed.pixiv.net/decorate.php?illust_id=36540187#.jpg")
   end
 
   it 'pixiv2' do
-    post '/', create_message_json('http://www.pixiv.net/member_illust.php?illust_id=57708370&mode=medium')
+    post '/', create_message_json('http://www.pixiv.net/member_illust.php?illust_id=16125568&mode=medium')
     expect(last_response).to be_ok
-    expect(last_response.body).to eq("土曜の昼とかにランチ作るエリみほ (by 梵辛@３日目東ニ５４ｂ)\nhttp://embed.pixiv.net/decorate.php?illust_id=57708370#.jpg")
+    expect(last_response.body).to match(%r`ちだまりスティック \(by .*ジェ.*\)\nhttp://embed\.pixiv\.net/decorate\.php\?illust_id=16125568#\.jpg`)
   end
 
   it 'pixiv R-18' do
-    post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=medium&illust_id=57723566')
+    post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=medium&illust_id=53233364')
     expect(last_response).to be_ok
-    expect(last_response.body).to match(%r`^\[R-18\] 生命に危険を及ぼす程のオシャレ \(by 山田の性活が第一\)\nhttp://.+\.pixiv\.net/c/\d+x\d+/img-\w+/img/.+\.jpg$`)
+    expect(last_response.body).to match(%r`^\[R-18\] Teaching Feeling ~奴隷との生活~ \(by Ray-Kbys\)\nhttp://.+\.pixiv\.net/c/64x64/img-\w+/img/.+\.jpg$`)
   end
 
   it 'pixiv R-18 ugoila' do
