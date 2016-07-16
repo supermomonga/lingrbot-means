@@ -283,14 +283,22 @@ class Bot < Sinatra::Base
     if res.code == '200'
       meta = res.at('meta[property="og:title"]').attr('content')
       r18 = res.at('.twitter-share-button').attr('data-text').include?('[R-18]')
+      r18g = res.at('.twitter-share-button').attr('data-text').include?('[R-18G]')
+      ugoila = res.at('.twitter-share-button').attr('data-text').include?('#うごイラ')
       title, author = meta.scan(/「([^」]+)」/).flatten
       illust_url = res.at('meta[property="og:image"]').attr('content')
       # for R-18 illust
       if illust_url.empty?
-        illust_url = res.at('.sensored img').attr('src')
+        if ugoila
+          illust_url = res.at('.selected_works img').attr('src').gsub('128x128', '64x64')
+        else
+          illust_url = res.at('.sensored img').attr('src')
+        end
       end
       if r18
         "[R-18] %s (by %s)\n%s" % [ title, author, append_extension(illust_url) ]
+      elsif r18g
+        "[R-18G] %s (by %s)" % [ title, author ]
       else
         "%s (by %s)\n%s" % [ title, author, append_extension(illust_url) ]
       end
