@@ -301,7 +301,7 @@ class Bot < Sinatra::Base
     res = @agent.get "http://nijie.info/view.php?id=#{id}"
     if res.code == '200'
       title = res.at('meta[property="og:title"]').attr('content')
-      illust_url = res.at('meta[property="og:image"]').attr('content').gsub(/nijie_picture\/sp/, 'small_light%28dw=70%29/nijie_picture')
+      illust_url = res.at('meta[property="og:image"]').attr('content').gsub(/nijie_picture\/sp/, 'small_light%28dw=70%29/nijie_picture').gsub(/^http:/, 'https')
       "%s\n%s" % [ title, illust_url ]
     end
   end
