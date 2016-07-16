@@ -64,6 +64,12 @@ https://pbs.twimg.com/media/CZ4H6I5WcAAbBGo.jpg')
     expect(last_response.body).to match(%r`^\[R-18\] 生命に危険を及ぼす程のオシャレ \(by 山田の性活が第一\)\nhttp://.+\.pixiv\.net/c/\d+x\d+/img-\w+/img/.+\.jpg$`)
   end
 
+  it 'nijie' do
+    post '/', create_message_json('http://nijie.info/view.php?id=23460')
+    expect(last_response).to be_ok
+    expect(last_response.body).to eq("（粘膜）密着！スペルマポリス２４ | ぶぶのすけ\nhttp://pic02.nijie.info/small_light%28dw=70%29/nijie_picture/2908_20120912222900.jpg")
+  end
+
   it 'multi URL' do
     post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=medium&illust_id=54003739 https://twitter.com/kumikumitm/status/693000092534587392')
     expect(last_response).to be_ok
