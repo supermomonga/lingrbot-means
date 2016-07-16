@@ -129,7 +129,7 @@ class Bot < Sinatra::Base
         proc { nicolive_gate($1) },
       %r`https?://(?:www|touch)?\.pixiv\.net/member_illust\.php.*illust_id=(\d+)` =>
         proc { pixiv_illust($1) },
-      %r`https?://nijie\.info/view\.php\?id=(\d+)` =>
+      %r`https?://(?:sp\.)?nijie\.info/view\.php\?id=(\d+)` =>
         proc { nijie_illust($1) },
       %r`https?://(?:mobile\.)?twitter\.com/[^\/]+/status(?:es)?/(\d+)(?:\/photo\/\d+)?$` =>
         proc { twitter_content($1.to_i) },
