@@ -64,6 +64,12 @@ https://pbs.twimg.com/media/CZ4H6I5WcAAbBGo.jpg')
     expect(last_response.body).to match(%r`^\[R-18\] 生命に危険を及ぼす程のオシャレ \(by 山田の性活が第一\)\nhttp://.+\.pixiv\.net/c/\d+x\d+/img-\w+/img/.+\.jpg$`)
   end
 
+  it 'pixiv R-18 ugoila' do
+    post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=medium&illust_id=55721718')
+    expect(last_response).to be_ok
+    expect(last_response.body).to match(%r`^\[R-18\] 純愛ックス \(by Ray-Kbys\)\nhttp://.+\.pixiv\.net/c/64x64/img-\w+/img/.+\.jpg$`)
+  end
+
   it 'nijie' do
     post '/', create_message_json('http://nijie.info/view.php?id=23460')
     expect(last_response).to be_ok
