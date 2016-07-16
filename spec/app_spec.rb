@@ -70,6 +70,12 @@ https://pbs.twimg.com/media/CZ4H6I5WcAAbBGo.jpg')
     expect(last_response.body).to match(%r`^\[R-18\] 純愛ックス \(by Ray-Kbys\)\nhttp://.+\.pixiv\.net/c/64x64/img-\w+/img/.+\.jpg$`)
   end
 
+  it 'pixiv R-18G' do
+    post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=medium&illust_id=40455206')
+    expect(last_response).to be_ok
+    expect(last_response.body).to match('[R-18G] 夜道でばったり (by 田口綺麗)')
+  end
+
   it 'nijie' do
     post '/', create_message_json('http://nijie.info/view.php?id=23460')
     expect(last_response).to be_ok
