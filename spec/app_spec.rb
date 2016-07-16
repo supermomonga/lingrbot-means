@@ -82,6 +82,12 @@ https://pbs.twimg.com/media/CZ4H6I5WcAAbBGo.jpg')
     expect(last_response.body).to eq("（粘膜）密着！スペルマポリス２４ | ぶぶのすけ\nhttps://pic02.nijie.info/small_light(dw=70)/nijie_picture/2908_20120912222900.jpg")
   end
 
+  it 'sp nijie' do
+    post '/', create_message_json('http://sp.nijie.info/view.php?id=23460')
+    expect(last_response).to be_ok
+    expect(last_response.body).to eq("（粘膜）密着！スペルマポリス２４ | ぶぶのすけ\nhttps://pic02.nijie.info/small_light(dw=70)/nijie_picture/2908_20120912222900.jpg")
+  end
+
   it 'multi URL' do
     post '/', create_message_json('https://nijie.info/view.php?id=175400 https://twitter.com/kumikumitm/status/693000092534587392')
     expect(last_response).to be_ok
