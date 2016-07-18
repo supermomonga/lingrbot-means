@@ -7,6 +7,7 @@ require 'open-uri'
 require 'digest/sha1'
 require 'addressable/uri'
 require 'uri'
+require 'webrick/httputils'
 
 require 'sinatra/reloader' if development?
 
@@ -404,7 +405,8 @@ class Bot < Sinatra::Base
 
   def escape_url url
     addressable_url = Addressable::URI.parse(url)
-    "#{addressable_url.normalized_site}#{URI.escape(addressable_url.path)}"
+    path = WEBrick::HTTPUtils.escape(addressable_url.path)
+    "#{addressable_url.normalized_site}#{path}#{addressable_url.normalized_query ? "?#{addressable_url.normalized_query}" : ''}"
   end
 
   def title_for_url url
