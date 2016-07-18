@@ -5,6 +5,9 @@ Bundler.require
 require 'erb'
 require 'open-uri'
 require 'digest/sha1'
+require 'addressable/uri'
+require 'uri'
+require 'webrick/httputils'
 
 require 'sinatra/reloader' if development?
 
@@ -393,14 +396,43 @@ class Bot < Sinatra::Base
     "https://dl.dropboxusercontent.com/#{url}"
   end
 
-  def title_for_url url
+  def has_not_linkable_char? url
+    url.bytes do |b|
+      return true if  (b & 0b10000000) != 0
+    end
+    return true if url.include?('[') or url.include?(']')
+    false
+  end
+
+  def escape_url url
+    addressable_url = Addressable::URI.parse(url)
+    path = WEBrick::HTTPUtils.escape(addressable_url.path)
+    "#{addressable_url.normalized_site}#{path}#{addressable_url.normalized_query ? "?#{addressable_url.normalized_query}" : ''}"
+  end
+
+  def scrape_title url
     res = @agent.get url
     if res.code == '200' && res['Content-Type'].include?('text/html')
       title = res.at('title').tap{|it|break it.inner_text if it} ||
         res.at('meta[property="og:title"]').tap{|it|it.attr('content') if it} ||
         res.at('meta[property="twitter:title"]').tap{|it|it.attr('content') if it}
-      return title if title
+      if title
+        return title
+      end
     end
+    nil
+  end
+
+  def title_for_url url
+    not_linkable = has_not_linkable_char? url
+    puts url
+    url = escape_url(url) if not_linkable
+    puts url
+    title = scrape_title url
+    result = []
+    result << url if not_linkable
+    result << title if title
+    result.join("\n")
   end
 
   def number_format n
