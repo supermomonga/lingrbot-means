@@ -103,6 +103,18 @@ http://avex.jp/pripara/1st/discography/
 DVD/CD | TVアニメ「プリパラ」BD・DVD・CD公式ホームページ")
   end
 
+  it '[]' do
+    post '/', create_message_json('https://i.ytimg.com/vi/zADyHief9JE/maxresdefault.jpg?[1]=5')
+    expect(last_response).to be_ok
+    expect(last_response.body).to eq("https://i.ytimg.com/vi/zADyHief9JE/maxresdefault.jpg?%5B1%5D=5")
+  end
+
+  it '[] with title' do
+    post '/', create_message_json('https://www.youtube.com/watch?v=ZDJPDSawgE4&[99]=aa')
+    expect(last_response).to be_ok
+    expect(last_response.body).to eq("https://www.youtube.com/watch?v=ZDJPDSawgE4&%5B99%5D=aa\nSansha sanyou Op full - YouTube")
+  end
+
   it 'multibyte URL' do
     post '/', create_message_json('https://湘南台商店連合会.com/')
     expect(last_response).to be_ok

@@ -396,10 +396,11 @@ class Bot < Sinatra::Base
     "https://dl.dropboxusercontent.com/#{url}"
   end
 
-  def has_multibyte? str
-    str.bytes do |b|
+  def has_not_linkable_char? url
+    url.bytes do |b|
       return true if  (b & 0b10000000) != 0
     end
+    return true if url.include?('[') or url.include?(']')
     false
   end
 
@@ -409,20 +410,29 @@ class Bot < Sinatra::Base
     "#{addressable_url.normalized_site}#{path}#{addressable_url.normalized_query ? "?#{addressable_url.normalized_query}" : ''}"
   end
 
-  def title_for_url url
-    mb = has_multibyte? url
-    url = escape_url(url) if mb
+  def scrape_title url
     res = @agent.get url
     if res.code == '200' && res['Content-Type'].include?('text/html')
       title = res.at('title').tap{|it|break it.inner_text if it} ||
         res.at('meta[property="og:title"]').tap{|it|it.attr('content') if it} ||
         res.at('meta[property="twitter:title"]').tap{|it|it.attr('content') if it}
       if title
-        mb ? "#{url}\n#{title}" : title
-      else
-        title
+        return title
       end
     end
+    nil
+  end
+
+  def title_for_url url
+    not_linkable = has_not_linkable_char? url
+    puts url
+    url = escape_url(url) if not_linkable
+    puts url
+    title = scrape_title url
+    result = []
+    result << url if not_linkable
+    result << title if title
+    result.join("\n")
   end
 
   def number_format n
