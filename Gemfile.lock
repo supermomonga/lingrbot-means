@@ -152,6 +152,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  addressable
   eventmachine (~> 1.0.4)
   foreman
   gemoji

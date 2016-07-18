@@ -5,6 +5,8 @@ Bundler.require
 require 'erb'
 require 'open-uri'
 require 'digest/sha1'
+require 'addressable/uri'
+require 'uri'
 
 require 'sinatra/reloader' if development?
 
@@ -393,13 +395,31 @@ class Bot < Sinatra::Base
     "https://dl.dropboxusercontent.com/#{url}"
   end
 
+  def has_multibyte? str
+    str.bytes do |b|
+      return true if  (b & 0b10000000) != 0
+    end
+    false
+  end
+
+  def escape_url url
+    addressable_url = Addressable::URI.parse(url)
+    "#{addressable_url.normalized_site}#{URI.escape(addressable_url.path)}"
+  end
+
   def title_for_url url
+    mb = has_multibyte? url
+    url = escape_url(url) if mb
     res = @agent.get url
     if res.code == '200' && res['Content-Type'].include?('text/html')
       title = res.at('title').tap{|it|break it.inner_text if it} ||
         res.at('meta[property="og:title"]').tap{|it|it.attr('content') if it} ||
         res.at('meta[property="twitter:title"]').tap{|it|it.attr('content') if it}
-      return title if title
+      if title
+        mb ? "#{url}\n#{title}" : title
+      else
+        title
+      end
     end
   end
 
