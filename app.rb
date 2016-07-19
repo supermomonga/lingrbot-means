@@ -425,9 +425,7 @@ class Bot < Sinatra::Base
 
   def title_for_url url
     not_linkable = has_not_linkable_char? url
-    puts url
     url = escape_url(url) if not_linkable
-    puts url
     title = scrape_title url
     result = []
     result << url if not_linkable
