@@ -406,8 +406,8 @@ class Bot < Sinatra::Base
 
   def escape_url url
     addressable_url = Addressable::URI.parse(url)
-    path = WEBrick::HTTPUtils.escape(addressable_url.path)
-    "#{addressable_url.normalized_site}#{path}#{addressable_url.normalized_query ? "?#{addressable_url.normalized_query}" : ''}"
+    after_site = url[addressable_url.site.size..-1]
+    "#{addressable_url.normalized_site}#{WEBrick::HTTPUtils.escape(after_site)}"
   end
 
   def scrape_title url
