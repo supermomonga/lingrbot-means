@@ -138,4 +138,16 @@ DVD/CD | TVアニメ「プリパラ」BD・DVD・CD公式ホームページ")
     expect(last_response).to be_ok
     expect(last_response.body).to eq("https://ja.m.wikipedia.org/wiki/%E9%99%84%E5%B1%9E%E6%B1%A0%E7%94%B0%E5%B0%8F%E4%BA%8B%E4%BB%B6\n附属池田小事件 - Wikipedia")
   end
+
+  it 'multibyte domain and encoded path' do
+    post '/', create_message_json('http://wiki.ポケモン.com/wiki/%E3%83%9D%E3%82%B1%E3%83%A2%E3%83%B3%E3%81%AE%E5%A4%96%E5%9B%BD%E8%AA%9E%E5%90%8D%E4%B8%80%E8%A6%A7')
+    expect(last_response).to be_ok
+    expect(last_response.body).to eq("http://wiki.xn--rckteqa2e.com/wiki/%E3%83%9D%E3%82%B1%E3%83%A2%E3%83%B3%E3%81%AE%E5%A4%96%E5%9B%BD%E8%AA%9E%E5%90%8D%E4%B8%80%E8%A6%A7\nポケモンの外国語名一覧 - ポケモンWiki")
+  end
+
+  it 'Punycode domain and multibyte path' do
+    post '/', create_message_json('http://wiki.xn--rckteqa2e.com/wiki/ポケモンの外国語名一覧')
+    expect(last_response).to be_ok
+    expect(last_response.body).to eq("http://wiki.xn--rckteqa2e.com/wiki/%E3%83%9D%E3%82%B1%E3%83%A2%E3%83%B3%E3%81%AE%E5%A4%96%E5%9B%BD%E8%AA%9E%E5%90%8D%E4%B8%80%E8%A6%A7\nポケモンの外国語名一覧 - ポケモンWiki")
+  end
 end
