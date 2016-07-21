@@ -405,7 +405,7 @@ class Bot < Sinatra::Base
   end
 
   def escape_url url
-    addressable_url = Addressable::URI.parse(url)
+    addressable_url = Addressable::URI.parse url
     after_site = url[addressable_url.site.size..-1]
     "#{addressable_url.normalized_site}#{WEBrick::HTTPUtils.escape(after_site)}"
   end
