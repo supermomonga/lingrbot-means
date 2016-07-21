@@ -407,7 +407,9 @@ class Bot < Sinatra::Base
   def escape_url url
     addressable_url = Addressable::URI.parse url
     after_site = url[addressable_url.site.size..-1]
-    "#{addressable_url.normalized_site}#{WEBrick::HTTPUtils.escape(after_site)}"
+    site = has_not_linkable_char?(addressable_url.site) ? addressable_url.normalized_site : addressable_url.site
+    after_site = has_not_linkable_char?(after_site) ? WEBrick::HTTPUtils.escape(after_site) : after_site
+    "#{site}#{after_site}"
   end
 
   def scrape_title url
