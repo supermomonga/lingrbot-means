@@ -396,19 +396,40 @@ class Bot < Sinatra::Base
     "https://dl.dropboxusercontent.com/#{url}"
   end
 
-  def has_not_linkable_char? url
+  @@not_linkable_glyphs = {
+    '[' => '%5B',
+    ']' => '%5D'
+  }
+
+  def has_not_linkable_glyph? url
+    @@not_linkable_glyphs.keys.each do |glyph|
+      return true if url.include?(glyph)
+    end
+    false
+  end
+
+  def has_multibyte_char? url
     url.bytes do |b|
       return true if  (b & 0b10000000) != 0
     end
-    return true if url.include?('[') or url.include?(']')
     false
+  end
+
+  def escape_path path
+    if has_multibyte_char? path
+      path = WEBrick::HTTPUtils.escape(path)
+    end
+    @@not_linkable_glyphs.each do |glyph, replace|
+      path = path.gsub(glyph, replace)
+    end
+    path
   end
 
   def escape_url url
     addressable_url = Addressable::URI.parse url
     after_site = url[addressable_url.site.size..-1]
-    site = has_not_linkable_char?(addressable_url.site) ? addressable_url.normalized_site : addressable_url.site
-    after_site = has_not_linkable_char?(after_site) ? WEBrick::HTTPUtils.escape(after_site) : after_site
+    site = has_multibyte_char?(addressable_url.site) ? addressable_url.normalized_site : addressable_url.site
+    after_site = escape_path after_site
     "#{site}#{after_site}"
   end
 
@@ -426,11 +447,10 @@ class Bot < Sinatra::Base
   end
 
   def title_for_url url
-    not_linkable = has_not_linkable_char? url
-    url = escape_url(url) if not_linkable
-    title = scrape_title url
+    escaped_url = escape_url url
+    title = scrape_title escaped_url
     result = []
-    result << url if not_linkable
+    result << escaped_url if escaped_url != url
     result << title if title
     result.join("\n")
   end
