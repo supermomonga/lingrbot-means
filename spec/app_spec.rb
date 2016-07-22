@@ -58,6 +58,18 @@ https://pbs.twimg.com/media/CZ4H6I5WcAAbBGo.jpg')
     expect(last_response.body).to match(%r`ちだまりスティック \(by .*ジェ.*\)\nhttp://embed\.pixiv\.net/decorate\.php\?illust_id=16125568#\.jpg`)
   end
 
+  it 'pixiv manga_big' do
+    post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=manga_big&illust_id=56962791&page=9')
+    expect(last_response).to be_ok
+    expect(last_response.body).to eq("SmileING TaleS 01 (by リョーサン)\nhttp://embed.pixiv.net/decorate.php?illust_id=56962791&page=9#.jpg")
+  end
+
+  it 'pixiv manga_big R-18' do
+    post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=manga_big&illust_id=55155738&page=2')
+    expect(last_response).to be_ok
+    expect(last_response.body).to match(%r`^\[R-18\] 愛里寿ちゃん始めてのドキドキ自画撮り \(by むおと\)\nhttp://.+\.pixiv\.net/c/64x64/img-\w+/img/.+\.jpg$`)
+  end
+
   it 'pixiv R-18' do
     post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=medium&illust_id=53233364')
     expect(last_response).to be_ok

@@ -130,8 +130,11 @@ class Bot < Sinatra::Base
         proc { nicovideo($1, $2) },
       %r`https?://live\.nicovideo\.jp/gate/(lv\d+)` =>
         proc { nicolive_gate($1) },
-      %r`https?://(?:www|touch)?\.pixiv\.net/member_illust\.php.*illust_id=(\d+)` =>
-        proc { pixiv_illust($1) },
+      %r`https?://(?:www|touch)?\.pixiv\.net/member_illust\.php\?[^\s]+` =>
+        proc { |url|
+          addressable_url = Addressable::URI.parse url
+          pixiv_illust(addressable_url.query_values)
+        },
       %r`https?://(?:sp\.)?nijie\.info/view\.php\?id=(\d+)` =>
         proc { nijie_illust($1) },
       %r`https?://(?:mobile\.)?twitter\.com/[^\/]+/status(?:es)?/(\d+)(?:\/photo\/\d+)?$` =>
@@ -170,7 +173,7 @@ class Bot < Sinatra::Base
     patterns.each { |regexp, process|
       if regexp.match(text)
         remainder = $'
-        return [remainder, process.call]
+        return [remainder, process.call($&)]
       end
     }
     [nil, nil]
@@ -281,28 +284,30 @@ class Bot < Sinatra::Base
     text
   end
 
-  def pixiv_illust id
-    res = @agent.get "http://www.pixiv.net/member_illust.php?illust_id=#{id}&mode=medium"
+  def pixiv_illust query
+    res = @agent.get "http://www.pixiv.net/member_illust.php?illust_id=#{query['illust_id']}&mode=medium"
     if res.code == '200'
       meta = res.at('meta[property="og:title"]').attr('content')
       r18 = res.at('.twitter-share-button').attr('data-text').include?('[R-18]')
       r18g = res.at('.twitter-share-button').attr('data-text').include?('[R-18G]')
       ugoila = res.at('.twitter-share-button').attr('data-text').include?('#うごイラ')
       title, author = meta.scan(/「([^」]+)」/).flatten
-      illust_url = res.at('meta[property="og:image"]').attr('content')
-      # for R-18 illust
-      if illust_url.empty?
+      if r18
         if ugoila
           illust_url = res.at('.selected_works img').attr('src').gsub('128x128', '64x64')
         else
           illust_url = res.at('.sensored img').attr('src')
         end
-      end
-      if r18
         "[R-18] %s (by %s)\n%s" % [ title, author, append_extension(illust_url) ]
       elsif r18g
         "[R-18G] %s (by %s)" % [ title, author ]
       else
+        case query['mode']
+        when 'medium'
+          illust_url = "http://embed.pixiv.net/decorate.php?illust_id=#{query['illust_id']}"
+        when 'manga_big'
+          illust_url = "http://embed.pixiv.net/decorate.php?illust_id=#{query['illust_id']}&page=#{query['page']}"
+        end
         "%s (by %s)\n%s" % [ title, author, append_extension(illust_url) ]
       end
     end
