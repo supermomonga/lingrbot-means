@@ -76,6 +76,12 @@ https://pbs.twimg.com/media/CZ4H6I5WcAAbBGo.jpg')
     expect(last_response.body).to match(%r`^\[R-18\] Teaching Feeling ~奴隷との生活~ \(by Ray-Kbys\)\nhttp://.+\.pixiv\.net/c/64x64/img-\w+/img/.+\.jpg$`)
   end
 
+  it 'pixiv ugoila' do
+    post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=medium&illust_id=58024542')
+    expect(last_response).to be_ok
+    expect(last_response.body).to eq("...♡ (by ひとで)\nhttp://embed.pixiv.net/decorate.php?illust_id=58024542#.jpg")
+  end
+
   it 'pixiv R-18 ugoila' do
     post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=medium&illust_id=55721718')
     expect(last_response).to be_ok
