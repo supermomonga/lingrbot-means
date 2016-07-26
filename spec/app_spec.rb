@@ -180,4 +180,18 @@ DVD/CD | TVアニメ「プリパラ」BD・DVD・CD公式ホームページ")
     expect(last_response).to be_ok
     expect(last_response.body).to eq("http://wiki.xn--rckteqa2e.com/wiki/%E3%83%9D%E3%82%B1%E3%83%A2%E3%83%B3%E3%81%AE%E5%A4%96%E5%9B%BD%E8%AA%9E%E5%90%8D%E4%B8%80%E8%A6%A7?%5B0%5D\nポケモンの外国語名一覧 - ポケモンWiki")
   end
+
+  describe 'unexplained bug in production' do
+    it 'multibyte URL with hibiki' do
+      post '/', create_message_json('http://dic.pixiv.net/a/紫京院ひびき')
+      expect(last_response).to be_ok
+      expect(last_response.body).to eq("http://dic.pixiv.net/a/%E7%B4%AB%E4%BA%AC%E9%99%A2%E3%81%B2%E3%81%B3%E3%81%8D\n紫京院ひびき (しきょういんひびき)とは【ピクシブ百科事典】")
+    end
+
+    it 'chichinai' do
+      post '/', create_message_json('http://iris-soft.jp/chichinai/')
+      expect(last_response).to be_ok
+      expect(last_response.body).to eq("ちっちゃくないもんっ！〜スクールバスでおむかえちゅっちゅ〜特設サイト")
+    end
+  end
 end
