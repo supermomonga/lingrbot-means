@@ -139,13 +139,13 @@ DVD/CD | TVアニメ「プリパラ」BD・DVD・CD公式ホームページ")
     expect(last_response.body).to eq("https://www.youtube.com/watch?v=ZDJPDSawgE4&%5B99%5D=aa\nSansha sanyou Op full - YouTube")
   end
 
-  it 'multibyte URL' do
+  it 'multibyte URL by domain' do
     post '/', create_message_json('https://湘南台商店連合会.com/')
     expect(last_response).to be_ok
     expect(last_response.body).to eq("https://xn--6oq16hen6c15e441ar5zrr0d.com/\n藤沢市北部の湘南台商店連合会公式サイト")
   end
 
-  it 'multibyte URL' do
+  it 'multibyte URL by domain and path' do
     post '/', create_message_json('https://湘南台商店連合会.com/news/日本の商店街では初めて？の日本語ドメイン利用/')
     expect(last_response).to be_ok
     expect(last_response.body).to eq("https://xn--6oq16hen6c15e441ar5zrr0d.com/news/%E6%97%A5%E6%9C%AC%E3%81%AE%E5%95%86%E5%BA%97%E8%A1%97%E3%81%A7%E3%81%AF%E5%88%9D%E3%82%81%E3%81%A6%EF%BC%9F%E3%81%AE%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%89%E3%83%A1%E3%82%A4%E3%83%B3%E5%88%A9%E7%94%A8/\n日本の商店街では初めて？の日本語ドメイン利用！ | 湘南台商店連合会公式サイト")
