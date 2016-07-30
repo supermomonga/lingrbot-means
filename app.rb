@@ -297,6 +297,9 @@ class Bot < Sinatra::Base
           illust_url = res.at('.selected_works img').attr('src').gsub('128x128', '64x64')
         else
           illust_url = res.at('.sensored img').attr('src')
+          if query['mode'] == 'manga_big' and (not query['page'].nil?)
+            illust_url = illust_url.gsub(/(?<=p)0(?=_square)/, query['page'])
+          end
         end
         "[R-18] %s (by %s)\n%s" % [ title, author, append_extension(illust_url) ]
       elsif r18g

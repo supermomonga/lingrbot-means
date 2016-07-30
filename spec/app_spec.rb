@@ -65,9 +65,15 @@ https://pbs.twimg.com/media/CZ4H6I5WcAAbBGo.jpg')
   end
 
   it 'pixiv manga_big R-18' do
+    post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=manga_big&illust_id=55155738')
+    expect(last_response).to be_ok
+    expect(last_response.body).to match(%r`^\[R-18\] 愛里寿ちゃん始めてのドキドキ自画撮り \(by むおと\)\nhttp://.+\.pixiv\.net/c/64x64/img-\w+/img/.+p0_square1200\.jpg$`)
+  end
+
+  it 'pixiv manga_big R-18 with page' do
     post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=manga_big&illust_id=55155738&page=2')
     expect(last_response).to be_ok
-    expect(last_response.body).to match(%r`^\[R-18\] 愛里寿ちゃん始めてのドキドキ自画撮り \(by むおと\)\nhttp://.+\.pixiv\.net/c/64x64/img-\w+/img/.+\.jpg$`)
+    expect(last_response.body).to match(%r`^\[R-18\] 愛里寿ちゃん始めてのドキドキ自画撮り \(by むおと\)\nhttp://.+\.pixiv\.net/c/64x64/img-\w+/img/.+p2_square1200\.jpg$`)
   end
 
   it 'pixiv R-18' do
