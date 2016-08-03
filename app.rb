@@ -137,7 +137,7 @@ class Bot < Sinatra::Base
         },
       %r`https?://(?:sp\.)?nijie\.info/view\.php\?id=(\d+)` =>
         proc { nijie_illust($1) },
-      %r`https?://(?:mobile\.)?twitter\.com/[^\/]+/status(?:es)?/(\d+)(?:\/photo\/\d+)?$` =>
+      %r`https?://(?:mobile\.)?twitter\.com/[^\/]+/status(?:es)?/(\d+)(?:\/photo\/\d+)?(?:\?\S*)?$` =>
         proc { twitter_content($1.to_i) },
       %r`https?://d\.pr/i/(\w+)$` =>
         proc { droplr_raw_url($1) },

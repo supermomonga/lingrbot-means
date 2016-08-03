@@ -46,6 +46,29 @@ https://pbs.twimg.com/media/CZ4H5jxWkAAHC6w.jpg
 https://pbs.twimg.com/media/CZ4H6I5WcAAbBGo.jpg')
   end
 
+  it 'twitter has params' do
+    post '/', create_message_json('https://twitter.com/nulltarou2/status/758963721494331393?ref_src=twsrc%5Etfw')
+    expect(last_response).to be_ok
+    expect(last_response.body).to match(%r`^.+ \(@\w+\) - [\d,]+RT / [\d,]+Fav 2016/07/29 18:53:46
+歌詞が更にじわる https://t\.co/HoYWgBaEyW$`)
+  end
+
+  it 'twitter photo' do
+    post '/', create_message_json('http://twitter.com/yurang92/status/756450385854799872/photo/1')
+    expect(last_response).to be_ok
+    expect(last_response.body).to match(%r`^.+ \(@\w+\) - [\d,]+RT / [\d,]+Fav 2016/07/22 20:26:40
+ちょっと遅くなったけどにこちゃん誕生日おめでと！ #矢澤にこ生誕祭2016 https://t\.co/H8t7iravWD
+https://pbs\.twimg\.com/media/Cn9zdJ5UEAI3wjk\.jpg$`)
+  end
+
+  it 'twitter photo and params' do
+    post '/', create_message_json('http://twitter.com/yurang92/status/756450385854799872/photo/1?ref_src=twsrc%5Etfw')
+    expect(last_response).to be_ok
+    expect(last_response.body).to match(%r`^.+ \(@\w+\) - [\d,]+RT / [\d,]+Fav 2016/07/22 20:26:40
+ちょっと遅くなったけどにこちゃん誕生日おめでと！ #矢澤にこ生誕祭2016 https://t\.co/H8t7iravWD
+https://pbs\.twimg\.com/media/Cn9zdJ5UEAI3wjk\.jpg$`)
+  end
+
   it 'pixiv' do
     post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=medium&illust_id=36540187')
     expect(last_response).to be_ok
