@@ -1,8 +1,7 @@
-version: '2'
-services:
-  web:
-    build: .
-    env_file: .env
-    ports:
-      - '5000:8080'
-    command: bundle exec unicorn -c ./config/unicorn.rb
+web:
+  build: .
+  env_file: .env
+  ports:
+    - '5000:8080'
+  command: bundle exec unicorn -c ./config/unicorn.rb
+  restart: always
