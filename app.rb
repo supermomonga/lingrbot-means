@@ -292,6 +292,8 @@ class Bot < Sinatra::Base
       r18g = res.at('.twitter-share-button').attr('data-text').include?('[R-18G]')
       ugoila = res.at('.twitter-share-button').attr('data-text').include?('#うごイラ')
       title, author = meta.scan(/「([^」]+)」/).flatten
+      rating = nil
+      illust_url = nil
       if r18
         if ugoila
           illust_url = res.at('.selected_works img').attr('src').gsub('128x128', '64x64')
@@ -301,9 +303,10 @@ class Bot < Sinatra::Base
             illust_url = illust_url.gsub(/(?<=p)0(?=_square)/, query['page'])
           end
         end
-        "[R-18] %s (by %s)\n%s" % [ title, author, append_extension(illust_url) ]
+        rating = 'R-18'
+        illust_url = append_extension(illust_url)
       elsif r18g
-        "[R-18G] %s (by %s)" % [ title, author ]
+        rating = 'R-18G'
       else
         case query['mode']
         when 'medium'
@@ -311,8 +314,9 @@ class Bot < Sinatra::Base
         when 'manga_big'
           illust_url = "http://embed.pixiv.net/decorate.php?illust_id=#{query['illust_id']}&page=#{query['page']}"
         end
-        "%s (by %s)\n%s" % [ title, author, append_extension(illust_url) ]
+        illust_url = append_extension(illust_url)
       end
+      "#{rating.nil? ? '' : "[#{rating}] "}#{title} (by #{author})#{illust_url.nil? ? '' : "\n#{illust_url}"}"
     end
   end
 
