@@ -163,9 +163,9 @@ DVD/CD | TVアニメ「プリパラ」BD・DVD・CD公式ホームページ")
   end
 
   it '[] with title' do
-    post '/', create_message_json('https://www.youtube.com/watch?v=ZDJPDSawgE4&[99]=aa')
+    post '/', create_message_json('https://www.youtube.com/watch?v=WWB01IuMvzA&[99]=aa')
     expect(last_response).to be_ok
-    expect(last_response.body).to eq("https://www.youtube.com/watch?v=ZDJPDSawgE4&%5B99%5D=aa\nSansha sanyou Op full - YouTube")
+    expect(last_response.body).to eq("https://www.youtube.com/watch?v=WWB01IuMvzA&%5B99%5D=aa\nGod knows... ''The Melancholy of Haruhi Suzumiya'' 【涼宮ハルヒの憂鬱】　【Kadokawa公認MAD】 - YouTube")
   end
 
   it 'multibyte URL by domain' do
