@@ -70,15 +70,21 @@ https://pbs\.twimg\.com/media/Cn9zdJ5UEAI3wjk\.jpg$`)
   end
 
   it 'pixiv' do
-    post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=medium&illust_id=36540187')
+    post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=medium&illust_id=36585065')
     expect(last_response).to be_ok
-    expect(last_response.body).to eq("ワンワン霊体験 (by 押切蓮介)\nhttp://embed.pixiv.net/decorate.php?illust_id=36540187#.jpg")
+    expect(last_response.body).to eq("ひぐらし (by 押切蓮介)\nhttp://embed.pixiv.net/decorate.php?illust_id=36585065#.jpg")
   end
 
   it 'pixiv2' do
     post '/', create_message_json('http://www.pixiv.net/member_illust.php?illust_id=16125568&mode=medium')
     expect(last_response).to be_ok
     expect(last_response.body).to match(%r`ちだまりスティック \(by .*ジェ.*\)\nhttp://embed\.pixiv\.net/decorate\.php\?illust_id=16125568#\.jpg`)
+  end
+
+  it 'pixiv manga when medium' do
+    post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=medium&illust_id=59271735')
+    expect(last_response).to be_ok
+    expect(last_response.body).to eq("ハルちゃんは弱い(2) (by らっパル) 漫画\nhttp://embed.pixiv.net/decorate.php?illust_id=59271735#.jpg")
   end
 
   it 'pixiv manga_big' do
@@ -108,13 +114,13 @@ https://pbs\.twimg\.com/media/Cn9zdJ5UEAI3wjk\.jpg$`)
   it 'pixiv ugoila' do
     post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=medium&illust_id=58024542')
     expect(last_response).to be_ok
-    expect(last_response.body).to eq("...♡ (by ひとで)\nhttp://embed.pixiv.net/decorate.php?illust_id=58024542#.jpg")
+    expect(last_response.body).to eq("...♡ (by ひとで) うごイラ\nhttp://embed.pixiv.net/decorate.php?illust_id=58024542#.jpg")
   end
 
   it 'pixiv R-18 ugoila' do
     post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=medium&illust_id=55721718')
     expect(last_response).to be_ok
-    expect(last_response.body).to match(%r`^\[R-18\] 純愛ックス \(by Ray-Kbys\)\nhttp://.+\.pixiv\.net/c/64x64/img-\w+/img/.+\.jpg$`)
+    expect(last_response.body).to match(%r`^\[R-18\] 純愛ックス \(by Ray-Kbys\) うごイラ\nhttp://.+\.pixiv\.net/c/64x64/img-\w+/img/.+\.jpg$`)
   end
 
   it 'pixiv R-18G' do
