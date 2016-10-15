@@ -141,6 +141,12 @@ https://pbs\.twimg\.com/media/Cn9zdJ5UEAI3wjk\.jpg$`)
     expect(last_response.body).to eq("（粘膜）密着！スペルマポリス２４ | ぶぶのすけ\nhttps://pic02.nijie.info/small_light(dw=70)/nijie_picture/2908_20120912222900.jpg")
   end
 
+  it 'deviantART' do
+    post '/', create_message_json('http://ray-kbys.deviantart.com/art/Deep-Love-612306624')
+    expect(last_response).to be_ok
+    expect(last_response.body).to eq("Deep Love by Ray-kbys on deviantART\nhttp://img02.deviantart.net/980e/i/2016/151/4/a/deep_love_by_ray_kbys-da4jutc.jpg")
+  end
+
   it 'multi URL' do
     post '/', create_message_json('https://nijie.info/view.php?id=175400 https://twitter.com/kumikumitm/status/693000092534587392')
     expect(last_response).to be_ok
