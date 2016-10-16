@@ -13,6 +13,7 @@ gem 'twitter', '~> 5.14.0'
 gem 'gemoji'
 gem 'gemoji-parser'
 gem 'addressable'
+gem 'deviantart'
 
 group :development, :test do
   gem 'sinatra-contrib'

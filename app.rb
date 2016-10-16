@@ -22,6 +22,7 @@ class Bot < Sinatra::Base
     init_redis
     init_gyazo
     init_twitter
+    init_deviantart
     spawn_worker
     super
   end
@@ -69,6 +70,15 @@ class Bot < Sinatra::Base
   def init_twitter
     @twitter = Twitter::REST::Client.new do |config|
       config.bearer_token        = ENV['TWITTER_BEARER_TOKEN'] || YAML.load_file('.travis.yml')['env']['global'].split('=')[1].delete("'")
+    end
+  end
+
+  def init_deviantart
+    @deviantart = DeviantArt.new do |config|
+      config.client_id = ENV['DEVIANTART_ID']
+      config.client_secret = ENV['DEVIANTART_SECRET']
+      config.grant_type = :client_credentials
+      config.access_token_auto_refresh = true
     end
   end
 
@@ -139,6 +149,8 @@ class Bot < Sinatra::Base
         proc { nijie_illust($1) },
       %r`https?://(?:mobile\.)?twitter\.com/[^\/]+/status(?:es)?/(\d+)(?:\/photo\/\d+)?(?:\?\S*)?$` =>
         proc { twitter_content($1.to_i) },
+      %r`(https?://.+\.deviantart\.com/art/.+)` =>
+        proc { deviantart_deviation $1 },
       %r`https?://d\.pr/i/(\w+)$` =>
         proc { droplr_raw_url($1) },
       %r`https?://seiga\.nicovideo\.jp/seiga/im(\d+)` =>
@@ -332,6 +344,17 @@ class Bot < Sinatra::Base
     if res.code == '200'
       title = res.at('meta[property="og:title"]').attr('content')
       illust_url = res.at('div.image img.mozamoza').attr('src').gsub(/\(.+\)/, '(dw=70)').gsub(%r`//`, 'https://')
+      "%s\n%s" % [ title, illust_url ]
+    end
+  end
+
+  def deviantart_deviation url
+    res = @agent.get url
+    if res.code == '200'
+      deviation_id = res.at('meta[property="da:appurl"]').attr('content').gsub(/^.+deviation\/([0-9A-F-]+)$/, '\1')
+      deviation = @deviantart.get_deviation(deviation_id)
+      illust_url = deviation['content']['src']
+      title = "#{deviation['title']} by #{deviation['author']['username']} on deviantART"
       "%s\n%s" % [ title, illust_url ]
     end
   end
