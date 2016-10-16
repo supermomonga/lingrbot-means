@@ -17,6 +17,15 @@ class Bot < Sinatra::Base
     register Sinatra::Reloader
   end
 
+  configure :production, :development, :test do
+    enable :logging
+  end
+
+  def logger
+    return @logger unless @logger.nil?
+    @logger = ::Logger.new($stderr)
+  end
+
   def initialize *args
     init_mechanize
     init_redis
