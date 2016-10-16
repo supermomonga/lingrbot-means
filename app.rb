@@ -109,7 +109,8 @@ class Bot < Sinatra::Base
           say message['room'], response if response
           puts "Didn't match." unless response
         rescue => e
-          puts "Got error: #{e}"
+          puts "[ERROR] #{e}"
+          puts e.backtrace.join("\n")
         end
       end
     end
