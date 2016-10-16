@@ -353,9 +353,14 @@ class Bot < Sinatra::Base
     if res.code == '200'
       deviation_id = res.at('meta[property="da:appurl"]').attr('content').gsub(/^.+deviation\/([0-9A-F-]+)$/, '\1')
       deviation = @deviantart.get_deviation(deviation_id)
-      illust_url = deviation['content']['src']
       title = "#{deviation['title']} by #{deviation['author']['username']} on deviantART"
-      "%s\n%s" % [ title, illust_url ]
+      if deviation['is_mature']
+        illust_url = deviation['thumbs'].min { |a, b| a['height'] <=> b['height'] }['src']
+        "[mature] %s\n%s" % [ title, illust_url ]
+      else
+        illust_url = deviation['content']['src']
+        "%s\n%s" % [ title, illust_url ]
+      end
     end
   end
 
