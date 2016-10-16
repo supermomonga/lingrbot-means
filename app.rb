@@ -83,17 +83,17 @@ class Bot < Sinatra::Base
   end
 
   def init_queues
-    puts "Initialize queues." unless @queues
+    logger.info "Initialize queues." unless @queues
     @queues ||= []
   end
 
   def enqueue message
-    puts "Enqueued."
+    logger.info "Enqueued."
     @queues.push message
   end
 
   def dequeue
-    puts "Dequeued."
+    logger.info "Dequeued."
     @queues.shift
   end
 
@@ -107,10 +107,10 @@ class Bot < Sinatra::Base
           message = dequeue
           response = handle_message message
           say message['room'], response if response
-          puts "Didn't match." unless response
+          logger.info "Didn't match." unless response
         rescue => e
-          STDERR.puts "[ERROR] #{e}"
-          STDERR.puts e.backtrace.join("\n")
+          logger.error "#{e}"
+          logger.error e.backtrace.join("\n")
         end
       end
     end
@@ -196,8 +196,8 @@ class Bot < Sinatra::Base
     message = convert_emoji message
     case ENV['RACK_ENV']
     when 'development'
-      puts "say to `#{room_id}`:"
-      puts decode_for_lingr message
+      logger.info "say to `#{room_id}`:"
+      logger.info decode_for_lingr message
     when 'test'
     else
       id     = ENV['BOT_ID']
