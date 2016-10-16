@@ -147,6 +147,12 @@ https://pbs\.twimg\.com/media/Cn9zdJ5UEAI3wjk\.jpg$`)
     expect(last_response.body).to eq("Deep Love by Ray-kbys on deviantART\nhttp://img02.deviantart.net/980e/i/2016/151/4/a/deep_love_by_ray_kbys-da4jutc.jpg")
   end
 
+  it 'deviantART mature' do
+    post '/', create_message_json('http://ray-kbys.deviantart.com/art/SweetRottenHalloween-409596429')
+    expect(last_response).to be_ok
+    expect(last_response.body).to eq("[mature] SweetRottenHalloween!! by Ray-kbys on deviantART\nhttp://t06.deviantart.net/6VO3IdgukbyGNxPo-dOFKqvbdZE=/fit-in/150x150/filters:no_upscale():origin()/pre10/c2e4/th/pre/i/2013/299/3/f/sweetrottenhalloween___by_ray_kbys-d6rv2ml.jpg")
+  end
+
   it 'multi URL' do
     post '/', create_message_json('https://nijie.info/view.php?id=175400 https://twitter.com/kumikumitm/status/693000092534587392')
     expect(last_response).to be_ok
