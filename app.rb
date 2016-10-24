@@ -285,11 +285,11 @@ class Bot < Sinatra::Base
   end
 
   def twitter_content status_id
-    s = @twitter.status status_id
+    s = @twitter.status status_id, { tweet_mode: 'extended' }
     name = s.attrs[:user][:name]
     date = s.created_at.getlocal("+09:00").strftime('%Y/%m/%d %H:%M:%S')
     screen_name = s.attrs[:user][:screen_name]
-    text = "%s (@%s) - %sRT / %sFav %s\n%s" % [ name, screen_name, number_format(s.retweet_count), number_format(s.favorite_count), date, s.text ]
+    text = "%s (@%s) - %sRT / %sFav %s\n%s" % [ name, screen_name, number_format(s.retweet_count), number_format(s.favorite_count), date, s.attrs[:full_text] ]
     if s.media?
       s.media.each do |medium|
         case medium
