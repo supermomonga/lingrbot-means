@@ -85,6 +85,14 @@ https://pbs\.twimg\.com/media/Cn9zdJ5UEAI3wjk\.jpg$`)
 https://pbs\.twimg\.com/media/Cn9zdJ5UEAI3wjk\.jpg$`)
   end
 
+  it 'twitter long tweet' do
+    post '/', create_message_json('https://twitter.com/hanomidori/status/789839578941169664')
+    expect(last_response).to be_ok
+    expect(last_response.body).to match(%r`^.+ \(@\w+\) - [\d,]+RT / [\d,]+Fav 2016/10/22 23:43:24
+明日のコミティアはL38a「はのみ堂」にて委員長おしっこ我慢本「クラス委員はくじけない！」を500円にて頒布いたします。今回スケブは受け付けません。色紙は希望者が居たら終わり頃差し上げますので、ツイッター告知時間に集合して頂ければと思います。 https://t\.co/S6IbB8xmXI
+https://pbs\.twimg\.com/media/CvYS5DzUAAAnnEa\.jpg$`)
+  end
+
   it 'pixiv' do
     post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=medium&illust_id=36585065')
     expect(last_response).to be_ok
