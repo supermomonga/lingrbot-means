@@ -53,6 +53,22 @@ https://pbs.twimg.com/media/CZ4H6I5WcAAbBGo.jpg')
 歌詞が更にじわる https://t\.co/HoYWgBaEyW$`)
   end
 
+  it 'twitter animated GIF' do
+    post '/', create_message_json('https://twitter.com/gusmachine/status/789087037030739968')
+    expect(last_response).to be_ok
+    expect(last_response.body).to match(%r`^.+ \(@\w+\) - [\d,]+RT / [\d,]+Fav 2016/10/20 21:53:04
+twitter, 投稿の際に下のGIFってやつ選んで Hillary って入力すると凄いGIFが無限に出てくる。 https://t\.co/UszmuiIdnd
+https://pbs\.twimg\.com/tweet_video/CvNmdqDUMAAt0j0\.mp4$`)
+  end
+
+  it 'twitter video' do
+    post '/', create_message_json('https://twitter.com/porterrobinson/status/790305156545941504')
+    expect(last_response).to be_ok
+    expect(last_response.body).to match(%r`^.+ \(@\w+\) - [\d,]+RT / [\d,]+Fav 2016/10/24 06:33:27
+i took this video at the first voiceover session for shelter\. can't describe the chills i felt hearing misawa's voice for the first time :'\) https://t.co/aG5yQa4P1W
+https://video\.twimg\.com/ext_tw_video/790304971933626369/pu/vid/720x1280/q0gz_peypV0mwF8r\.mp4$`)
+  end
+
   it 'twitter photo' do
     post '/', create_message_json('http://twitter.com/yurang92/status/756450385854799872/photo/1')
     expect(last_response).to be_ok
@@ -67,6 +83,14 @@ https://pbs\.twimg\.com/media/Cn9zdJ5UEAI3wjk\.jpg$`)
     expect(last_response.body).to match(%r`^.+ \(@\w+\) - [\d,]+RT / [\d,]+Fav 2016/07/22 20:26:40
 ちょっと遅くなったけどにこちゃん誕生日おめでと！ #矢澤にこ生誕祭2016 https://t\.co/H8t7iravWD
 https://pbs\.twimg\.com/media/Cn9zdJ5UEAI3wjk\.jpg$`)
+  end
+
+  it 'twitter long tweet' do
+    post '/', create_message_json('https://twitter.com/hanomidori/status/789839578941169664')
+    expect(last_response).to be_ok
+    expect(last_response.body).to match(%r`^.+ \(@\w+\) - [\d,]+RT / [\d,]+Fav 2016/10/22 23:43:24
+明日のコミティアはL38a「はのみ堂」にて委員長おしっこ我慢本「クラス委員はくじけない！」を500円にて頒布いたします。今回スケブは受け付けません。色紙は希望者が居たら終わり頃差し上げますので、ツイッター告知時間に集合して頂ければと思います。 https://t\.co/S6IbB8xmXI
+https://pbs\.twimg\.com/media/CvYS5DzUAAAnnEa\.jpg$`)
   end
 
   it 'pixiv' do
