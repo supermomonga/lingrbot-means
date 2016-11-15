@@ -289,7 +289,13 @@ class Bot < Sinatra::Base
     name = s.attrs[:user][:name]
     date = s.created_at.getlocal("+09:00").strftime('%Y/%m/%d %H:%M:%S')
     screen_name = s.attrs[:user][:screen_name]
-    text = "%s (@%s) - %sRT / %sFav %s\n%s" % [ name, screen_name, number_format(s.retweet_count), number_format(s.favorite_count), date, s.attrs[:full_text] ]
+    full_text = s.attrs[:full_text]
+    if s.uris?
+      s.attrs[:entities][:urls].each do |urls|
+        full_text.gsub!(urls[:url], urls[:expanded_url])
+      end
+    end
+    text = "%s (@%s) - %sRT / %sFav %s\n%s" % [ name, screen_name, number_format(s.retweet_count), number_format(s.favorite_count), date,  full_text]
     if s.media?
       s.media.each do |medium|
         case medium
