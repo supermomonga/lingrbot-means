@@ -34,5 +34,5 @@ This bot posts the image url related with user's post.
 ### How to Test
 
 ```bash
-tail -n 3 .travis.yml | sed -e 's/^    -//' | paste -s | xargs -I % sh -c '% bundle exec rake spec'
+bundle exec rake spec_with_env
 ```
