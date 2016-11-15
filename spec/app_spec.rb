@@ -47,10 +47,17 @@ https://pbs.twimg.com/media/CZ4H6I5WcAAbBGo.jpg')
   end
 
   it 'twitter has params' do
-    post '/', create_message_json('https://twitter.com/nulltarou2/status/758963721494331393?ref_src=twsrc%5Etfw')
+    post '/', create_message_json('https://twitter.com/mattn_jp/status/798035328535818240?ref_src=twsrc%5Etfw')
+    expect(last_response).to be_ok
+    expect(last_response.body).to match(%r`^.+ \(@\w+\) - [\d,]+RT / [\d,]+Fav 2016/11/14 14:30:23
+そうだね$`)
+  end
+
+  it 'twitter expanded URL' do
+    post '/', create_message_json('https://twitter.com/nulltarou2/status/758963721494331393')
     expect(last_response).to be_ok
     expect(last_response.body).to match(%r`^.+ \(@\w+\) - [\d,]+RT / [\d,]+Fav 2016/07/29 18:53:46
-歌詞が更にじわる https://t\.co/HoYWgBaEyW$`)
+歌詞が更にじわる https://twitter\.com/kawa988/status/758840448001593344$`)
   end
 
   it 'twitter animated GIF' do
