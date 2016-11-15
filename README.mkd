@@ -25,6 +25,12 @@ This bot posts the image url related with user's post.
   - Livedoor blog
   - Yahoo Blog
 
+### Requirement Environment Variables
+
+- TWITTER_BEARER_TOKEN
+- DEVIANTART_ID
+- DEVIANTART_SECRET
+
 ### How to Test
 
 ```bash
