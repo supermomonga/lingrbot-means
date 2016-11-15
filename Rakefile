@@ -9,6 +9,7 @@ task :spec do |t|
     Rake::Task[:spec_run].invoke
   else
     puts "Read README.mkd for setting env bot needs: #{envs.join(', ')}"
+    puts "You can use default setting; bundle exec rake spec_with_env"
   end
 end
 
