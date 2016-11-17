@@ -32,6 +32,7 @@ class Bot < Sinatra::Base
     init_gyazo
     init_twitter
     init_deviantart
+    @emoji_regex = Regexp.new("(#{Twemoji.codes.values.map{|v|v.split('-').map{|c|c.to_i(16).chr('UTF-8')}.join.gsub(/(\||\?|\*|\(|\)|\{|\}|\[|\]|\+|\.)/){|c|"\\#{c}"}}.join('|')})")
     spawn_worker
     super
   end
@@ -225,8 +226,8 @@ class Bot < Sinatra::Base
   end
 
   def convert_emoji text
-    EmojiParser.parse_unicode(text) {|emoji|
-      "[%s]" % emoji.name
+    text.gsub(@emoji_regex) { |emoji|
+      "[%s]" % Twemoji.find_by_unicode(emoji)
     }
   end
 
