@@ -46,6 +46,13 @@ https://pbs.twimg.com/media/CZ4H5jxWkAAHC6w.jpg
 https://pbs.twimg.com/media/CZ4H6I5WcAAbBGo.jpg')
   end
 
+  it 'twitter with new emoji' do
+    post '/', create_message_json('https://twitter.com/hosoekota0405/status/795919338855243781')
+    expect(last_response).to be_ok
+    expect(last_response.body).to match(%r`^.+ \(@\w+\) - [\d,]+RT / [\d,]+Fav 2016/11/08 18:22:12
+球技大会なかなか楽しかったのことですね\[:table_tennis_paddle_and_ball:\]$`)
+  end
+
   it 'twitter has params' do
     post '/', create_message_json('https://twitter.com/mattn_jp/status/798035328535818240?ref_src=twsrc%5Etfw')
     expect(last_response).to be_ok
