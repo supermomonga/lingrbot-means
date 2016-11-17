@@ -140,7 +140,7 @@ class Bot < Sinatra::Base
           text = remainder
         end
       end
-      results.join("\n")
+      convert_emoji results.join("\n")
     end
   end
 
@@ -202,7 +202,6 @@ class Bot < Sinatra::Base
   end
 
   def say room_id, message
-    message = convert_emoji message
     case ENV['RACK_ENV']
     when 'development'
       logger.info "say to `#{room_id}`:"
