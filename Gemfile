@@ -10,8 +10,7 @@ gem 'redis'
 
 gem 'gyazo'
 gem 'twitter', '~> 5.14'
-gem 'gemoji'
-gem 'gemoji-parser'
+gem 'twemoji'
 gem 'addressable'
 gem 'deviantart'
 
