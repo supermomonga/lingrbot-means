@@ -11,7 +11,7 @@ GEM
     domain_name (0.5.20161021)
       unf (>= 0.0.5, < 1.0.0)
     equalizer (0.0.10)
-    eventmachine (1.2.0.1)
+    eventmachine (1.2.1)
     faraday (0.9.2)
       multipart-post (>= 1.2, < 3)
     ffi (1.9.14)
@@ -103,7 +103,7 @@ GEM
     rb-fsevent (0.9.8)
     rb-inotify (0.9.7)
       ffi (>= 0.5.0)
-    redis (3.3.1)
+    redis (3.3.2)
     rspec (3.5.0)
       rspec-core (~> 3.5.0)
       rspec-expectations (~> 3.5.0)
@@ -178,7 +178,7 @@ DEPENDENCIES
   unicorn
 
 RUBY VERSION
-   ruby 2.3.1p112
+   ruby 2.3.2p217
 
 BUNDLED WITH
    1.13.6
