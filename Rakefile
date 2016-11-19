@@ -1,8 +1,10 @@
 require 'rspec/core/rake_task'
 require 'yaml'
 
+desc 'The reality of RSpec'
 RSpec::Core::RakeTask.new(:spec_run)
 
+desc 'Run RSpec test with checking env bot needs'
 task :spec do |t|
   envs = ['TWITTER_BEARER_TOKEN', 'DEVIANTART_ID', 'DEVIANTART_SECRET']
   if envs.reject(&ENV.method(:include?)).size == 0
@@ -13,6 +15,7 @@ task :spec do |t|
   end
 end
 
+desc 'Run RSpec test with using env what is in .travis.yml'
 task :spec_with_env do |t|
   yaml = YAML.load_file('.travis.yml')
   yaml['env']['global'].each do |e|
