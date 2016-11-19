@@ -83,6 +83,14 @@ i took this video at the first voiceover session for shelter\. can't describe th
 https://video\.twimg\.com/ext_tw_video/790304971933626369/pu/vid/720x1280/q0gz_peypV0mwF8r\.mp4$`)
   end
 
+  it 'twitter video long URL' do
+    post '/', create_message_json('https://twitter.com/tomato_dayo/status/797753682087395329/video/1')
+    expect(last_response).to be_ok
+    expect(last_response.body).to match(%r`^.+ \(@\w+\) - [\d,]+RT / [\d,]+Fav 2016/11/13 19:51:14
+放課後ミッドナイターズ　細かい動作描写に笑える https://t.co/JWcPxpO1i4
+https://video\.twimg\.com/ext_tw_video/797753098538098688/pu/vid/640x360/2Bw6FUaCQnW_gu7F\.mp4$`)
+  end
+
   it 'twitter photo' do
     post '/', create_message_json('http://twitter.com/yurang92/status/756450385854799872/photo/1')
     expect(last_response).to be_ok
