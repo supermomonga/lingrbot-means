@@ -158,7 +158,7 @@ class Bot < Sinatra::Base
         },
       %r`https?://(?:sp\.)?nijie\.info/view\.php\?id=(\d+)` =>
         proc { nijie_illust($1) },
-      %r`https?://(?:mobile\.)?twitter\.com/[^\/]+/status(?:es)?/(\d+)(?:\/photo\/\d+)?(?:\?\S*)?$` =>
+      %r`https?://(?:mobile\.)?twitter\.com/[^\/]+/status(?:es)?/(\d+)(?:\/(?:photo|video)\/\d+)?(?:\?\S*)?$` =>
         proc { twitter_content($1.to_i) },
       %r`(https?://.+\.deviantart\.com/art/.+)` =>
         proc { deviantart_deviation $1 },
