@@ -36,3 +36,9 @@ This bot posts the image url related with user's post.
 ```bash
 bundle exec rake spec_with_env
 ```
+
+You can run only subset of RSpec example:
+
+```bash
+bundle exec rake 'spec_with_env["pixiv manga"]'
+```
