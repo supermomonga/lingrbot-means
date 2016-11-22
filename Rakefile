@@ -1,7 +1,8 @@
 require 'rspec/core/rake_task'
 require 'yaml'
 
-desc 'DO NOT USE DIRECTLY, the reality of RSpec'
+# DO NOT USE DIRECTLY, the reality of RSpec
+desc '' # empty string for hidden task
 RSpec::Core::RakeTask.new(:spec_run, :example_name) do |t, args|
   t.rspec_opts = "-e #{args[:example_name]}" if args.has_key? :example_name
 end
