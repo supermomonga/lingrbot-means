@@ -1,7 +1,8 @@
 require 'rspec/core/rake_task'
 require 'yaml'
 
-desc 'DO NOT USE DIRECTLY, the reality of RSpec'
+# DO NOT USE DIRECTLY, the reality of RSpec
+desc '' # empty string for hidden task
 RSpec::Core::RakeTask.new(:spec_run)
 
 desc 'Run RSpec test with checking env bot needs'
