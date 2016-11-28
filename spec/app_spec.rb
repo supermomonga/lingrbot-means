@@ -129,6 +129,13 @@ https://pbs\.twimg\.com/media/CvYS5DzUAAAnnEa\.jpg$`)
 イラスト、漫画、キャラごちゃまぜです。`)
   end
 
+  it 'twitter moments with modification' do
+    post '/', create_message_json('https://twitter.com/i/moments/781707146434142208')
+    expect(last_response).to be_ok
+    expect(last_response.body).to match(%r`デレマス壁ドンシリーズ - .+ \(@\w+\) - 2016/09/30 04:31 更新 \d{4}/\d{2}/\d{2} \d{2}:\d{2}
+「 #デレマス壁ドンシリーズ 」をまとめました。冬コミ合わせで「デレマス壁ドンイラスト集」を発行予定。3日目東4ミ12a配置です。　※無断転載、無断使用・加工等はご遠慮ください。`)
+  end
+
   it 'pixiv' do
     post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=medium&illust_id=36585065')
     expect(last_response).to be_ok
