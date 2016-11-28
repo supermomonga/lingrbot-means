@@ -8,6 +8,8 @@ require 'digest/sha1'
 require 'addressable/uri'
 require 'uri'
 require 'webrick/httputils'
+require 'json'
+require 'date'
 
 require 'sinatra/reloader' if development?
 
@@ -160,6 +162,8 @@ class Bot < Sinatra::Base
         proc { nijie_illust($1) },
       %r`https?://(?:mobile\.)?twitter\.com/[^\/]+/status(?:es)?/(\d+)(?:\/(?:photo|video)\/\d+)?(?:\?\S*)?$` =>
         proc { twitter_content($1.to_i) },
+      %r`https?://(?:mobile\.)?twitter\.com/i/moments/(\d+)` =>
+        proc { twitter_moment_content($1.to_i) },
       %r`(https?://.+\.deviantart\.com/art/.+)` =>
         proc { deviantart_deviation $1 },
       %r`https?://d\.pr/i/(\w+)$` =>
@@ -310,6 +314,25 @@ class Bot < Sinatra::Base
     # require 'pp'
     # pp s.attrs
     text
+  end
+
+  def twitter_moment_content moment_id
+    res = @agent.get "https://twitter.com/i/moments/#{moment_id}"
+    if res.code != '200'
+      return
+    end
+    json_ld = JSON.parse(res.at('script[@type="application/ld+json"]').content)
+    fullname = res.at('meta[@name="twitter:text:subcategory_string"]').attr 'content'
+    screenname = json_ld['author']['name']
+    headline = json_ld['headline']
+    description = json_ld['description']
+    date_published = DateTime.iso8601(json_ld['datePublished'])
+    date_modified = DateTime.iso8601(json_ld['dateModified'])
+    date = date_published.strftime('%Y/%m/%d %H:%M')
+    unless date_published == date_modified
+      date += " 更新 #{date_modified.strftime('%Y/%m/%d %H:%M')}"
+    end
+    "#{headline} - #{fullname} (@#{screenname}) - #{date}\n#{description}"
   end
 
   def pixiv_illust query
