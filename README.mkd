@@ -1,4 +1,4 @@
-![](https://travis-ci.org/supermomonga/lingrbot-means.svg?branch=master)
+[![Travis CI Build status](https://travis-ci.org/supermomonga/lingrbot-means.svg)](https://travis-ci.org/supermomonga/lingrbot-means)
 
 
 ## Thumbnail bot for lingr
