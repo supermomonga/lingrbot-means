@@ -342,7 +342,7 @@ class Bot < Sinatra::Base
       r18 = res.at('.twitter-share-button').attr('data-text').include?('[R-18]')
       r18g = res.at('.twitter-share-button').attr('data-text').include?('[R-18G]')
       ugoila = res.at('.twitter-share-button').attr('data-text').include?('#うごイラ')
-      manga = !res.at('div.img-container a.manga').nil?
+      manga = !res.at('div.img-container a.multiple').nil?
       title, author = meta.scan(/「([^」]+)」/).flatten
       rating = nil
       kind = nil
