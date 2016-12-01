@@ -336,7 +336,8 @@ class Bot < Sinatra::Base
   end
 
   def pixiv_illust query
-    res = @agent.get "http://www.pixiv.net/member_illust.php?illust_id=#{query['illust_id']}&mode=medium"
+    url = "http://www.pixiv.net/member_illust.php?illust_id=#{query['illust_id']}&mode=medium"
+    res = @agent.get url
     if res.code == '200'
       meta = res.at('meta[property="og:title"]').attr('content')
       r18 = res.at('.twitter-share-button').attr('data-text').include?('[R-18]')
