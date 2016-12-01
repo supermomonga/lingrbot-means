@@ -375,7 +375,7 @@ class Bot < Sinatra::Base
         end
         illust_url = append_extension(illust_url)
       end
-      "#{rating.nil? ? '' : "[#{rating}] "}#{title} (by #{author})#{kind.nil? ? '' : " #{kind}"}#{illust_url.nil? ? '' : "\n#{illust_url}"}"
+      "#{query['mode'] == 'manga_big' ? "#{url}\n" : ''}#{rating.nil? ? '' : "[#{rating}] "}#{title} (by #{author})#{kind.nil? ? '' : " #{kind}"}#{illust_url.nil? ? '' : "\n#{illust_url}"}"
     end
   end
 
