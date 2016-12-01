@@ -148,6 +148,12 @@ https://pbs\.twimg\.com/media/CvYS5DzUAAAnnEa\.jpg$`)
     expect(last_response.body).to match(%r`ちだまりスティック \(by .*ジェ.*\)\nhttp://embed\.pixiv\.net/decorate\.php\?illust_id=16125568#\.jpg`)
   end
 
+  it 'pixiv manga when manga tag but just illust' do
+    post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=medium&illust_id=59237287')
+    expect(last_response).to be_ok
+    expect(last_response.body).to eq("えっちの続き (by 斬々舞@いっぱいおえかき)\nhttp://embed.pixiv.net/decorate.php?illust_id=59237287#.jpg")
+  end
+
   it 'pixiv manga when medium' do
     post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=medium&illust_id=59271735')
     expect(last_response).to be_ok
