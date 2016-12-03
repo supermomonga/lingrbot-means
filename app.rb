@@ -336,13 +336,14 @@ class Bot < Sinatra::Base
   end
 
   def pixiv_illust query
-    res = @agent.get "http://www.pixiv.net/member_illust.php?illust_id=#{query['illust_id']}&mode=medium"
+    url = "http://www.pixiv.net/member_illust.php?illust_id=#{query['illust_id']}&mode=medium"
+    res = @agent.get url
     if res.code == '200'
       meta = res.at('meta[property="og:title"]').attr('content')
       r18 = res.at('.twitter-share-button').attr('data-text').include?('[R-18]')
       r18g = res.at('.twitter-share-button').attr('data-text').include?('[R-18G]')
       ugoila = res.at('.twitter-share-button').attr('data-text').include?('#うごイラ')
-      manga = !res.at('div.img-container a.manga').nil?
+      manga = !res.at('div.img-container a.multiple').nil?
       title, author = meta.scan(/「([^」]+)」/).flatten
       rating = nil
       kind = nil
@@ -374,7 +375,7 @@ class Bot < Sinatra::Base
         end
         illust_url = append_extension(illust_url)
       end
-      "#{rating.nil? ? '' : "[#{rating}] "}#{title} (by #{author})#{kind.nil? ? '' : " #{kind}"}#{illust_url.nil? ? '' : "\n#{illust_url}"}"
+      "#{query['mode'] == 'manga_big' ? "#{url}\n" : ''}#{rating.nil? ? '' : "[#{rating}] "}#{title} (by #{author})#{kind.nil? ? '' : " #{kind}"}#{illust_url.nil? ? '' : "\n#{illust_url}"}"
     end
   end
 
