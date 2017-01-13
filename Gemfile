@@ -11,6 +11,7 @@ gem 'redis'
 gem 'gyazo'
 gem 'twitter', '~> 5.14'
 gem 'twemoji'
+gem 'pdf-reader'
 gem 'addressable'
 gem 'deviantart'
 
