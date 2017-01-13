@@ -72,7 +72,7 @@ https://pbs.twimg.com/media/CZ4H6I5WcAAbBGo.jpg')
     expect(last_response).to be_ok
     expect(last_response.body).to match(%r`^.+ \(@\w+\) - [\d,]+RT / [\d,]+Fav 2016/10/20 21:53:04
 twitter, 投稿の際に下のGIFってやつ選んで Hillary って入力すると凄いGIFが無限に出てくる。 https://t\.co/UszmuiIdnd
-https://pbs\.twimg\.com/tweet_video/CvNmdqDUMAAt0j0\.mp4$`)
+https://.+\.mp4$`)
   end
 
   it 'twitter video' do
