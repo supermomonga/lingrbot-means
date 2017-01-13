@@ -116,17 +116,17 @@ https://pbs\.twimg\.com/media/CvYS5DzUAAAnnEa\.jpg$`)
   end
 
   it 'twitter moments' do
-    post '/', create_message_json('https://twitter.com/i/moments/789448724648857601')
+    post '/', create_message_json('https://twitter.com/i/moments/819705563927851009')
     expect(last_response).to be_ok
-    expect(last_response.body).to match(%r`デレマス絵まとめ\(4月～10月\) - .+ \(@\w+\) - 2016/10/21 13:52
-イラスト、漫画、キャラごちゃまぜです。`)
+    expect(last_response.body).to match(%r`GREAT OBAMA - Code Ass \(@aycabta\) - 2017/01/13 00:45
+TRUTH`)
   end
 
   it 'twitter moments mobile' do
-    post '/', create_message_json('https://mobile.twitter.com/i/moments/789448724648857601')
+    post '/', create_message_json('https://mobile.twitter.com/i/moments/819705563927851009')
     expect(last_response).to be_ok
-    expect(last_response.body).to match(%r`デレマス絵まとめ\(4月～10月\) - .+ \(@\w+\) - 2016/10/21 13:52
-イラスト、漫画、キャラごちゃまぜです。`)
+    expect(last_response.body).to match(%r`GREAT OBAMA - Code Ass \(@aycabta\) - 2017/01/13 00:45
+TRUTH`)
   end
 
   it 'twitter moments with modification' do
