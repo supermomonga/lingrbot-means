@@ -118,14 +118,14 @@ https://pbs\.twimg\.com/media/CvYS5DzUAAAnnEa\.jpg$`)
   it 'twitter moments' do
     post '/', create_message_json('https://twitter.com/i/moments/819705563927851009')
     expect(last_response).to be_ok
-    expect(last_response.body).to match(%r`GREAT OBAMA - Code Ass \(@aycabta\) - 2017/01/13 00:45
+    expect(last_response.body).to match(%r`GREAT OBAMA - .+ \(@\w+\) - 2017/01/13 00:45
 TRUTH`)
   end
 
   it 'twitter moments mobile' do
     post '/', create_message_json('https://mobile.twitter.com/i/moments/819705563927851009')
     expect(last_response).to be_ok
-    expect(last_response.body).to match(%r`GREAT OBAMA - Code Ass \(@aycabta\) - 2017/01/13 00:45
+    expect(last_response.body).to match(%r`GREAT OBAMA - .+ \(@\w+\) - 2017/01/13 00:45
 TRUTH`)
   end
 
