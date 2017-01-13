@@ -47,10 +47,10 @@ https://pbs.twimg.com/media/CZ4H6I5WcAAbBGo.jpg')
   end
 
   it 'twitter with new emoji' do
-    post '/', create_message_json('https://twitter.com/hosoekota0405/status/795919338855243781')
+    post '/', create_message_json('https://twitter.com/BBCSport/status/762936466003464192')
     expect(last_response).to be_ok
-    expect(last_response.body).to match(%r`^.+ \(@\w+\) - [\d,]+RT / [\d,]+Fav 2016/11/08 18:22:12
-球技大会なかなか楽しかったのことですね\[:table_tennis_paddle_and_ball:\]$`)
+    expect(last_response.body).to match(%r`^.+ \(@\w+\) - [\d,]+RT / [\d,]+Fav 2016/08/09 18:00:02
+What a rally! \[:table_tennis_paddle_and_ball:\]`)
   end
 
   it 'twitter has params' do
