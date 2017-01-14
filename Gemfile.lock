@@ -6,7 +6,7 @@ GEM
     backports (3.6.8)
     buftok (0.2.0)
     coderay (1.1.1)
-    deviantart (0.3.0)
+    deviantart (0.3.2)
     diff-lcs (1.2.5)
     domain_name (0.5.20161129)
       unf (>= 0.0.5, < 1.0.0)
@@ -51,13 +51,13 @@ GEM
     http_parser.rb (0.6.0)
     httparty (0.14.0)
       multi_xml (>= 0.5.2)
-    json (1.8.3)
-    kgio (2.10.0)
+    json (1.8.5)
+    kgio (2.11.0)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
       ruby_dep (~> 1.2)
-    lumberjack (1.0.10)
+    lumberjack (1.0.11)
     mechanize (2.7.5)
       domain_name (~> 0.5, >= 0.5.1)
       http-cookie (~> 1.0)
@@ -76,7 +76,7 @@ GEM
     mimemagic (0.3.2)
     mini_portile2 (2.1.0)
     multi_json (1.12.1)
-    multi_xml (0.5.5)
+    multi_xml (0.6.0)
     multipart-post (2.0.0)
     naught (1.1.0)
     nenv (0.3.0)
@@ -92,14 +92,14 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
-    public_suffix (2.0.4)
+    public_suffix (2.0.5)
     rack (1.6.5)
     rack-protection (1.5.3)
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
     raindrops (0.17.0)
-    rake (11.3.0)
+    rake (12.0.0)
     rb-fsevent (0.9.8)
     rb-inotify (0.9.7)
       ffi (>= 0.5.0)
@@ -135,9 +135,9 @@ GEM
     thor (0.19.4)
     thread_safe (0.3.5)
     tilt (2.0.5)
-    twemoji (3.0.2)
+    twemoji (3.1.0)
       nokogiri (~> 1.6.2)
-    twitter (5.16.0)
+    twitter (5.17.0)
       addressable (~> 2.3)
       buftok (~> 0.2.0)
       equalizer (= 0.0.10)
@@ -178,7 +178,7 @@ DEPENDENCIES
   unicorn
 
 RUBY VERSION
-   ruby 2.3.3p222
+   ruby 2.4.0p0
 
 BUNDLED WITH
-   1.13.6
+   1.13.7
