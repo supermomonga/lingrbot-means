@@ -47,10 +47,10 @@ https://pbs.twimg.com/media/CZ4H6I5WcAAbBGo.jpg')
   end
 
   it 'twitter with new emoji' do
-    post '/', create_message_json('https://twitter.com/hosoekota0405/status/795919338855243781')
+    post '/', create_message_json('https://twitter.com/BBCSport/status/762936466003464192')
     expect(last_response).to be_ok
-    expect(last_response.body).to match(%r`^.+ \(@\w+\) - [\d,]+RT / [\d,]+Fav 2016/11/08 18:22:12
-球技大会なかなか楽しかったのことですね\[:table_tennis_paddle_and_ball:\]$`)
+    expect(last_response.body).to match(%r`^.+ \(@\w+\) - [\d,]+RT / [\d,]+Fav 2016/08/09 18:00:02
+What a rally! \[:table_tennis_paddle_and_ball:\]`)
   end
 
   it 'twitter has params' do
@@ -72,7 +72,7 @@ https://pbs.twimg.com/media/CZ4H6I5WcAAbBGo.jpg')
     expect(last_response).to be_ok
     expect(last_response.body).to match(%r`^.+ \(@\w+\) - [\d,]+RT / [\d,]+Fav 2016/10/20 21:53:04
 twitter, 投稿の際に下のGIFってやつ選んで Hillary って入力すると凄いGIFが無限に出てくる。 https://t\.co/UszmuiIdnd
-https://pbs\.twimg\.com/tweet_video/CvNmdqDUMAAt0j0\.mp4$`)
+https://.+\.mp4$`)
   end
 
   it 'twitter video' do
@@ -116,24 +116,24 @@ https://pbs\.twimg\.com/media/CvYS5DzUAAAnnEa\.jpg$`)
   end
 
   it 'twitter moments' do
-    post '/', create_message_json('https://twitter.com/i/moments/789448724648857601')
+    post '/', create_message_json('https://twitter.com/i/moments/819705563927851009')
     expect(last_response).to be_ok
-    expect(last_response.body).to match(%r`デレマス絵まとめ\(4月～10月\) - .+ \(@\w+\) - 2016/10/21 13:52
-イラスト、漫画、キャラごちゃまぜです。`)
+    expect(last_response.body).to match(%r`GREAT OBAMA - .+ \(@\w+\) - 2017/01/13 00:45
+TRUTH`)
   end
 
   it 'twitter moments mobile' do
-    post '/', create_message_json('https://mobile.twitter.com/i/moments/789448724648857601')
+    post '/', create_message_json('https://mobile.twitter.com/i/moments/819705563927851009')
     expect(last_response).to be_ok
-    expect(last_response.body).to match(%r`デレマス絵まとめ\(4月～10月\) - .+ \(@\w+\) - 2016/10/21 13:52
-イラスト、漫画、キャラごちゃまぜです。`)
+    expect(last_response.body).to match(%r`GREAT OBAMA - .+ \(@\w+\) - 2017/01/13 00:45
+TRUTH`)
   end
 
   it 'twitter moments with modification' do
     post '/', create_message_json('https://twitter.com/i/moments/781707146434142208')
     expect(last_response).to be_ok
     expect(last_response.body).to match(%r`デレマス壁ドンシリーズ - .+ \(@\w+\) - 2016/09/30 04:31 更新 \d{4}/\d{2}/\d{2} \d{2}:\d{2}
-「 #デレマス壁ドンシリーズ 」をまとめました。冬コミ合わせで「デレマス壁ドンイラスト集」を発行予定。3日目東4ミ12a配置です。　※無断転載、無断使用・加工等はご遠慮ください。`)
+.+$`)
   end
 
   it 'pixiv' do
