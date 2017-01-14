@@ -192,6 +192,8 @@ class Bot < Sinatra::Base
         proc { irasutoya_illust $1 },
       %r`https?://www.dropbox.com/(.+\.(?:jpe?g|gif|png))\?dl=0` =>
         proc { dropbox_image_raw_url $1 },
+      %r`(https?://[^\s]+\.pdf)` =>
+        proc { title_for_pdf $1 },
       %r`(https?://i.imgur.com/[0-9a-zA-Z]+\.gif)v` =>
         proc { $1 },
       %r`(https?://[^\s]+)` =>
@@ -481,6 +483,12 @@ class Bot < Sinatra::Base
 
   def dropbox_image_raw_url url
     "https://dl.dropboxusercontent.com/#{url}"
+  end
+
+  def title_for_pdf url
+    io = open url
+    reader = PDF::Reader.new io
+    return reader.info[:Title]
   end
 
   @@not_linkable_glyphs = {
