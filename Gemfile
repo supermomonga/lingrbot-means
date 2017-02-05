@@ -9,7 +9,7 @@ gem 'redis'
 
 
 gem 'gyazo'
-gem 'twitter', '~> 5.14'
+gem 'twitter'
 gem 'twemoji'
 gem 'pdf-reader'
 gem 'addressable'
