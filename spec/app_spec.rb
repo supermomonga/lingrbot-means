@@ -313,11 +313,5 @@ DVD/CD | TVアニメ「プリパラ」BD・DVD・CD公式ホームページ")
       expect(last_response).to be_ok
       expect(last_response.body).to eq("http://dic.pixiv.net/a/%E7%B4%AB%E4%BA%AC%E9%99%A2%E3%81%B2%E3%81%B3%E3%81%8D\n紫京院ひびき (しきょういんひびき)とは【ピクシブ百科事典】")
     end
-
-    it 'chichinai' do
-      post '/', create_message_json('http://iris-soft.jp/chichinai/')
-      expect(last_response).to be_ok
-      expect(last_response.body).to eq("ちっちゃくないもんっ！〜スクールバスでおむかえちゅっちゅ〜特設サイト")
-    end
   end
 end
