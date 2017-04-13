@@ -86,7 +86,7 @@ class Bot < Sinatra::Base
   end
 
   def init_deviantart
-    @deviantart = DeviantArt.new do |config|
+    @deviantart = DeviantArt::Client.new do |config|
       config.client_id = ENV['DEVIANTART_ID']
       config.client_secret = ENV['DEVIANTART_SECRET']
       config.grant_type = :client_credentials
