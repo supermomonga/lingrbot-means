@@ -1,2 +1,2 @@
-FROM ruby:2.3.1-onbuild
+FROM ruby:2.4.1-onbuild
 CMD ["bundle exec foreman server"]
