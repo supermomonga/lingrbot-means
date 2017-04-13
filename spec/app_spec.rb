@@ -163,25 +163,25 @@ TRUTH`)
   it 'pixiv manga_big' do
     post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=manga_big&illust_id=56962791&page=9')
     expect(last_response).to be_ok
-    expect(last_response.body).to eq("http://www.pixiv.net/member_illust.php?illust_id=56962791&mode=medium\nSmileING TaleS 01 (by リョーサン) 漫画\nhttp://embed.pixiv.net/decorate.php?illust_id=56962791&page=9#.jpg")
+    expect(last_response.body).to eq("http://www.pixiv.net/member_illust.php?illust_id=56962791&mode=medium\nSmileING TaleS 01 (by 祁答院諒真) 漫画\nhttp://embed.pixiv.net/decorate.php?illust_id=56962791&page=9#.jpg")
   end
 
   it 'pixiv manga_big R-18' do
     post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=manga_big&illust_id=55155738')
     expect(last_response).to be_ok
-    expect(last_response.body).to match(%r`^\[R-18\] 愛里寿ちゃん始めてのドキドキ自画撮り \(by むおと\)\nhttp://.+\.pixiv\.net/c/64x64/img-\w+/img/.+p0_square1200\.jpg$`)
+    expect(last_response.body).to match(%r`^\[R-18\] 愛里寿ちゃん始めてのドキドキ自画撮り \(by むおと\)\nhttps?://.+\.pximg\.net/c/64x64/img-\w+/img/.+p0_square1200\.jpg$`)
   end
 
   it 'pixiv manga_big R-18 with page' do
     post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=manga_big&illust_id=55240249&page=1')
     expect(last_response).to be_ok
-    expect(last_response.body).to match(%r`^\[R-18\] 無題 \(by もつあき\)\nhttp://.+\.pixiv\.net/c/64x64/img-\w+/img/.+p1_square1200\.jpg$`)
+    expect(last_response.body).to match(%r`^\[R-18\] 無題 \(by もつあき\)\nhttps://.+\.pximg\.net/c/64x64/img-\w+/img/.+p1_square1200\.jpg$`)
   end
 
   it 'pixiv R-18' do
     post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=medium&illust_id=53233364')
     expect(last_response).to be_ok
-    expect(last_response.body).to match(%r`^\[R-18\] Teaching Feeling ~奴隷との生活~ \(by Ray-Kbys\)\nhttp://.+\.pixiv\.net/c/64x64/img-\w+/img/.+\.jpg$`)
+    expect(last_response.body).to match(%r`^\[R-18\] Teaching Feeling ~奴隷との生活~ \(by Ray-Kbys\)\nhttps?://.+\.pximg\.net/c/64x64/img-\w+/img/.+\.jpg$`)
   end
 
   it 'pixiv ugoila' do
@@ -193,7 +193,7 @@ TRUTH`)
   it 'pixiv R-18 ugoila' do
     post '/', create_message_json('http://www.pixiv.net/member_illust.php?mode=medium&illust_id=55721718')
     expect(last_response).to be_ok
-    expect(last_response.body).to match(%r`^\[R-18\] 純愛ックス \(by Ray-Kbys\) うごイラ\nhttp://.+\.pixiv\.net/c/64x64/img-\w+/img/.+\.jpg$`)
+    expect(last_response.body).to match(%r`^\[R-18\] 純愛ックス \(by Ray-Kbys\) うごイラ\nhttps?://.+\.pximg\.net/c/64x64/img-\w+/img/.+\.jpg$`)
   end
 
   it 'pixiv R-18G' do
@@ -243,7 +243,7 @@ https://pbs.twimg.com/media/CZ4H6I5WcAAbBGo.jpg")
 http://avex.jp/pripara/1st/discography/
 2')
     expect(last_response).to be_ok
-    expect(last_response.body).to eq("プリパラ☆ミュージックコレクションDX／プリパラ☆ミュージックコレクション DVD/CD | TVアニメ「プリパラ」DVD・CD公式ホームページ
+    expect(last_response.body).to eq("プリパラ☆ミュージックコレクションDX／プリパラ☆ミュージックコレクション DVD/CD | TVアニメ「アイドルタイムプリパラ」DVD・CD公式ホームページ
 DVD/CD | TVアニメ「プリパラ」BD・DVD・CD公式ホームページ")
   end
 
