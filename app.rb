@@ -197,7 +197,7 @@ class Bot < Sinatra::Base
       %r`(https?://i.imgur.com/[0-9a-zA-Z]+\.gif)v` =>
         proc { $1 },
       %r`(https?://[^\s]+)` =>
-        proc { title_for_url $1 }
+        proc { content_for_url $1 }
     }
     patterns.each { |regexp, process|
       if regexp.match(text)
@@ -528,25 +528,33 @@ class Bot < Sinatra::Base
     "#{site}#{after_site}"
   end
 
-  def scrape_title url
-    res = @agent.get url
+  def content_for_url url
+    escaped_url = escape_url url
+    meta = scrape_meta(@agent.get(escaped_url))
+    result = []
+    result << escaped_url if escaped_url != url
+    result << meta[:title] if meta[:title]
+    result << meta[:image] if meta[:image]
+    result.join("\n")
+  end
+
+  def scrape_meta res
+    meta = {}
     if res.code == '200' && res['Content-Type'].include?('text/html')
-      title = res.at('title').tap{|it|break it.inner_text if it} ||
-        res.at('meta[property="og:title"]').tap{|it|it.attr('content') if it} ||
-        res.at('meta[property="twitter:title"]').tap{|it|it.attr('content') if it}
-      if title
-        return title
-      end
+      meta[:title] = res.at('title')&.inner_text ||
+        res.at('meta[property="og:title"]')&.attr('content') ||
+        res.at('meta[property="twitter:title"]')&.attr('content')
+      meta[:image] = res.at('meta[property="og:image"]')&.attr('content')
     end
-    nil
+    meta
   end
 
   def title_for_url url
     escaped_url = escape_url url
-    title = scrape_title escaped_url
+    meta = scrape_meta(@agent.get(escaped_url))
     result = []
     result << escaped_url if escaped_url != url
-    result << title if title
+    result << meta[:title] if meta[:title]
     result.join("\n")
   end
 

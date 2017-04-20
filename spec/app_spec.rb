@@ -31,6 +31,12 @@ describe 'The Semantics=san' do
     expect(last_response.body).to eq('')
   end
 
+  it 'og:image' do
+    post '/', create_message_json('https://pawoo.net/@fakkuma/2288501')
+    expect(last_response).to be_ok
+    expect(last_response.body).to eq("Pawoo(パウー)\nhttps://img.pawoo.net/media_attachments/files/000/206/256/small/db31f1ad8739d7d1.jpg?1492695231")
+  end
+
   it 'seiga' do
     post '/', create_message_json('http://seiga.nicovideo.jp/seiga/im5479269')
     expect(last_response).to be_ok
@@ -256,19 +262,19 @@ DVD/CD | TVアニメ「プリパラ」BD・DVD・CD公式ホームページ")
   it '[] with title' do
     post '/', create_message_json('https://www.youtube.com/watch?v=WWB01IuMvzA&[99]=aa')
     expect(last_response).to be_ok
-    expect(last_response.body).to eq("https://www.youtube.com/watch?v=WWB01IuMvzA&%5B99%5D=aa\nGod knows... ''The Melancholy of Haruhi Suzumiya'' 【涼宮ハルヒの憂鬱】　【Kadokawa公認MAD】 - YouTube")
+    expect(last_response.body).to eq("https://www.youtube.com/watch?v=WWB01IuMvzA&%5B99%5D=aa\nGod knows... ''The Melancholy of Haruhi Suzumiya'' 【涼宮ハルヒの憂鬱】　【Kadokawa公認MAD】 - YouTube\nhttps://i.ytimg.com/vi/WWB01IuMvzA/hqdefault.jpg")
   end
 
   it 'multibyte URL by domain' do
     post '/', create_message_json('https://湘南台商店連合会.com/')
     expect(last_response).to be_ok
-    expect(last_response.body).to eq("https://xn--6oq16hen6c15e441ar5zrr0d.com/\n藤沢市北部の湘南台商店連合会公式サイト")
+    expect(last_response.body).to eq("https://xn--6oq16hen6c15e441ar5zrr0d.com/\n藤沢市北部の湘南台商店連合会公式サイト\nhttps://xn--6oq16hen6c15e441ar5zrr0d.com/wp/wp-content/uploads/2015/04/facebook_icon02.png")
   end
 
   it 'multibyte URL by domain and path' do
     post '/', create_message_json('https://湘南台商店連合会.com/news/日本の商店街では初めて？の日本語ドメイン利用/')
     expect(last_response).to be_ok
-    expect(last_response.body).to eq("https://xn--6oq16hen6c15e441ar5zrr0d.com/news/%E6%97%A5%E6%9C%AC%E3%81%AE%E5%95%86%E5%BA%97%E8%A1%97%E3%81%A7%E3%81%AF%E5%88%9D%E3%82%81%E3%81%A6%EF%BC%9F%E3%81%AE%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%89%E3%83%A1%E3%82%A4%E3%83%B3%E5%88%A9%E7%94%A8/\n日本の商店街では初めて？の日本語ドメイン利用！ | 湘南台商店連合会公式サイト")
+    expect(last_response.body).to eq("https://xn--6oq16hen6c15e441ar5zrr0d.com/news/%E6%97%A5%E6%9C%AC%E3%81%AE%E5%95%86%E5%BA%97%E8%A1%97%E3%81%A7%E3%81%AF%E5%88%9D%E3%82%81%E3%81%A6%EF%BC%9F%E3%81%AE%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%89%E3%83%A1%E3%82%A4%E3%83%B3%E5%88%A9%E7%94%A8/\n日本の商店街では初めて？の日本語ドメイン利用！ | 湘南台商店連合会公式サイト\nhttps://xn--6oq16hen6c15e441ar5zrr0d.com/wp/wp-content/uploads/2015/04/facebook_icon02.png")
   end
 
   it 'multibyte URL' do
@@ -311,7 +317,7 @@ DVD/CD | TVアニメ「プリパラ」BD・DVD・CD公式ホームページ")
     it 'multibyte URL with hibiki' do
       post '/', create_message_json('http://dic.pixiv.net/a/紫京院ひびき')
       expect(last_response).to be_ok
-      expect(last_response.body).to eq("http://dic.pixiv.net/a/%E7%B4%AB%E4%BA%AC%E9%99%A2%E3%81%B2%E3%81%B3%E3%81%8D\n紫京院ひびき (しきょういんひびき)とは【ピクシブ百科事典】")
+      expect(last_response.body).to eq("http://dic.pixiv.net/a/%E7%B4%AB%E4%BA%AC%E9%99%A2%E3%81%B2%E3%81%B3%E3%81%8D\n紫京院ひびき (しきょういんひびき)とは【ピクシブ百科事典】\nhttps://i.pximg.net/c/150x150/img-master/img/2015/06/30/20/27/18/51170494_p0_master1200.jpg")
     end
   end
 end
