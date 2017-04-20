@@ -2,6 +2,6 @@ web:
   build: .
   env_file: .env
   ports:
-    - '5000:8080'
+    - '5001:8080'
   command: bundle exec unicorn -c ./config/unicorn.rb
   restart: always
